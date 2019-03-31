@@ -31,5 +31,12 @@ namespace AdminPage.Models
             this.CategoryId = categoryId;
             this.TimeRegistration = timeRegistration;
         }
+
+        public int insert()
+        {
+            DBservices db = new DBservices();
+            int rowAffected = db.InsertIntoQueue(this);
+            return rowAffected;
+        }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AdminPage.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -22,8 +23,19 @@ namespace AdminPage.Controllers
         }
 
         // POST: api/GameManager
-        public void Post([FromBody]string value)
+        [HttpPost]
+        [Route("api/GameManager")]//הקשר לאג'קס
+        public void Post([FromBody]GameManager gm)
         {
+            try
+            {
+                gm.insert();
+            }
+
+            catch (Exception)
+            {
+                throw new Exception("בעיה בהכנסת רשומה חדשה");
+            }
         }
 
         // PUT: api/GameManager/5
