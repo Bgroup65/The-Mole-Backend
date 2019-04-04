@@ -39,7 +39,7 @@ namespace AdminPage.Controllers
                 p.Insert();
             }
 
-            catch (Exception ex)
+            catch (Exception )
             {
                 throw new Exception("בעיה בהכנסת הנתונים למערכת");
             }

@@ -10,6 +10,8 @@ namespace The_Mole_Backend.Controllers
 {
     public class UsersInGameController : ApiController
     {
+        public UsersInGame UsersInGameList { get; private set; }
+
         // GET: api/UsersInGame
         [HttpGet]
         [Route("api/UsersInGame")]

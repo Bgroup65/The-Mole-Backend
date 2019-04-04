@@ -47,7 +47,7 @@ namespace AdminPage.Controllers
                 bool isExsits = a.CheckLoginDetails(adminMail, adminPassword);
                 return isExsits;
             }
-            catch (Exception ex)
+            catch (Exception )
             {
                 throw new Exception("קרתה בעיה בעת כניסת המשתמש למערכת");
             }
