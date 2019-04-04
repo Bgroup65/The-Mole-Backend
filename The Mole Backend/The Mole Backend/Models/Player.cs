@@ -7,6 +7,8 @@ namespace AdminPage.Models
 {
     public class Player
     {
+        string uid;
+        string token;
         string createdAt;
         string lastLogin;
         string locale;
@@ -75,6 +77,8 @@ namespace AdminPage.Models
         public string Locale { get => locale; set => locale = value; }
         public string ProfilePic { get => profilePic; set => profilePic = value; }
         public string LastLogin { get => lastLogin; set => lastLogin = value; }
+        public string Uid { get => uid; set => uid = value; }
+        public string Token { get => token; set => token = value; }
 
         public Player()
         {
@@ -99,7 +103,34 @@ namespace AdminPage.Models
             int rowAffected = db.insert(this);
             return rowAffected;
         }
+        public string GetToken(string uid)
+        {
+            DBservices db = new DBservices();
+            string token = db.getToken(uid);
+            return token;
+        }
+        public int InsertToken(string token,string uid)
+        {
+            DBservices db = new DBservices();
 
+            int rowAffected = db.insertToken(token,uid);
+            return rowAffected;
+        }
+        public int InsertAvatar(string avatarUrl,string uid)
+        {
+            DBservices db = new DBservices();
+
+            int rowAffected = db.insertToken(token, uid);
+            return rowAffected;
+        }
+        //InsertLastLogin
+        public int InsertLastLogin(string uid)
+        {
+            DBservices db = new DBservices();
+
+            int rowAffected = db.insertLastLogin(uid);
+            return rowAffected;
+        }
         public List<Player> Read()
         {
             DBservices dbs = new DBservices();
@@ -107,5 +138,6 @@ namespace AdminPage.Models
             return lp;
 
         }
+
     }
 }

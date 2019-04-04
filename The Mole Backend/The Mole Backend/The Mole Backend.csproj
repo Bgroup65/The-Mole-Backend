@@ -205,7 +205,6 @@
     <Compile Include="Controllers\NetworkController.cs" />
     <Compile Include="Controllers\PlayerController.cs" />
     <Compile Include="Controllers\SIXDOWController.cs" />
-    <Compile Include="Controllers\UsersInGameController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
     <Compile Include="Controllers\VerteciesIsInGameController.cs" />
     <Compile Include="Global.asax.cs">
@@ -219,7 +218,6 @@
     <Compile Include="Models\MainAlgoritm.cs" />
     <Compile Include="Models\Player.cs" />
     <Compile Include="Models\SixDOWAlgorithm.cs" />
-    <Compile Include="Models\UsersInGame.cs" />
     <Compile Include="Models\VerteciesIsInGame.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
