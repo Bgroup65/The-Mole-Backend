@@ -22,6 +22,76 @@
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@7"></script>
 
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="../Scripts/jquery-3.3.1.min.js"></script>
+    <script src="../Scripts/ajaxCalls.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            //getting all users who logged today
+            ajaxCall("GET", "../api/PlayerToday", "", getSuccess1, error1);
+
+            //getting all users who created this month
+            ajaxCall("GET", "../api/PlayerThismonth", "", getSuccess2, error2);
+
+            //getting all games who created this month
+            ajaxCall("GET", "../api/GamesThismonth", "", getSuccess3, error3);
+
+            //getting Admin's NickName & Pic
+            var user = JSON.parse(localStorage.getItem("user"));
+            ajaxCall("GET", "../api/Admin/?Email=" + user.Email, "", getSuccessAdmin, errorAdmin);
+        });
+
+        function getSuccess1(num) {
+            try {
+                $("#TodaysPlayers").html(num);
+            } catch (er) {
+                swal("", er, "warning");
+            }
+        }
+        function error1(error) {
+            console.log(error);
+        }
+
+
+        function getSuccess2(num) {
+            try {
+                $("#MonthPlayers").html(num);
+            } catch (er) {
+                swal("", er, "warning");
+            }
+        }
+        function error2(error) {
+            console.log(error);
+        }
+
+
+        function getSuccess3(num) {
+            try {
+                $("#MonthGames").html(num);
+            } catch (er) {
+                swal("", er, "warning");
+            }
+        }
+        function error3(error) {
+            console.log(error);
+        }
+
+        function getSuccessAdmin(admin) {
+            try {
+                $("#AdminName").html(admin.NickName);
+                $("#AdminPic").attr('src', admin.URL);
+                localStorage.setItem("AdminPic", admin.URL)
+            } catch (er) {
+                swal("", er, "warning");
+            }
+        }
+        function errorAdmin(error) {
+            console.log(error);
+        }
+    </script>
+
 </head>
 
 <body id="page-top">
@@ -52,10 +122,13 @@
                     <ul class="navbar-nav ml-auto">
                         <!-- Nav Item - User Information -->
                         <li class="nav-item dropdown no-arrow">
-                            <a class="nav-link dropdown-toggle" href="dashboard.html" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">Admin Name</span>
-                                <img class="img-profile rounded-circle" src="https://source.unsplash.com/QAB-WJcbgJk/60x60">
-                            </a>
+                            <a class="nav-link dropdown-toggle" href="login.html" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                <span id="AdminName" class="mr-2 d-none d-lg-inline text-gray-600 small"></span>
+                                <div class="topbar-divider d-none d-sm-block"></div>
+                                <span class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400">Logout</span>
+                                <img id="AdminPic" class="img-profile rounded-circle">
+                                </a>
+
                         </li>
                     </ul>
 
@@ -65,12 +138,12 @@
                 <div class="container-fluid">
 
                     <!-- Page Heading -->
-                    <div class="d-sm-flex align-items-center justify-content-between mb-4">                     
+                    <div class="d-sm-flex align-items-center justify-content-between mb-4">
                         <button onClick="DataRet()" href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i class="fas fa-download fa-sm text-white-50"></i> Data retrieval </button>
                     </div>
 
                     <!-- Content Row -->
-                    <div class="row">
+                    <div class="row align-items-center justify-content-center">
 
                         <!-- Earnings (Monthly) Card Example -->
                         <div class="col-xl-3 col-md-6 mb-4">
@@ -79,7 +152,7 @@
                                     <div class="row no-gutters align-items-center">
                                         <div class="col mr-2">
                                             <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Players Online</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">4,000</div>
+                                            <div id="TodaysPlayers" class="h5 mb-0 font-weight-bold text-gray-800"></div>
                                             <div class="mr-2">Today</div>
                                         </div>
                                         <div class="col-auto">
@@ -97,38 +170,11 @@
                                     <div class="row no-gutters align-items-center">
                                         <div class="col mr-2">
                                             <div class="text-xs font-weight-bold text-success text-uppercase mb-1">New Users</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">112</div>
+                                            <div id="MonthPlayers" class="h5 mb-0 font-weight-bold text-gray-800"></div>
                                             <div class="mr-2">This month</div>
                                         </div>
                                         <div class="col-auto">
                                             <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Earnings (Monthly) Card Example -->
-                        <div class="col-xl-3 col-md-6 mb-4">
-                            <div class="card border-left-info shadow h-100 py-2">
-                                <div class="card-body">
-                                    <div class="row no-gutters align-items-center">
-                                        <div class="col mr-2">
-                                            <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Growth</div>
-                                            <div class="row no-gutters align-items-center">
-                                                <div class="col-auto">
-                                                    <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">25%</div>
-                                                    <div class="mr-2">This month</div>
-                                                </div>
-                                                <div class="col">
-                                                    <div class="progress progress-sm mr-2">
-                                                        <div class="progress-bar bg-info" role="progressbar" style="width: 25%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-auto">
-                                            <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
                                         </div>
                                     </div>
                                 </div>
@@ -142,8 +188,8 @@
                                     <div class="row no-gutters align-items-center">
                                         <div class="col mr-2">
                                             <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">Games</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">18</div>
-                                            <div class="mr-2">Today</div>
+                                            <div id="MonthGames" class="h5 mb-0 font-weight-bold text-gray-800"></div>
+                                            <div class="mr-2">This month</div>
                                         </div>
                                         <div class="col-auto">
                                             <i class="fas fa-comments fa-2x text-gray-300"></i>
@@ -168,13 +214,6 @@
                                         <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                             <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
                                         </a>
-                                        <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in" aria-labelledby="dropdownMenuLink">
-                                            <div class="dropdown-header">Dropdown Header:</div>
-                                            <a class="dropdown-item" href="#">Action</a>
-                                            <a class="dropdown-item" href="#">Another action</a>
-                                            <div class="dropdown-divider"></div>
-                                            <a class="dropdown-item" href="#">Something else here</a>
-                                        </div>
                                     </div>
                                 </div>
                                 <!-- Card Body -->
@@ -196,13 +235,6 @@
                                         <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                             <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
                                         </a>
-                                        <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in" aria-labelledby="dropdownMenuLink">
-                                            <div class="dropdown-header">Dropdown Header:</div>
-                                            <a class="dropdown-item" href="#">Action</a>
-                                            <a class="dropdown-item" href="#">Another action</a>
-                                            <div class="dropdown-divider"></div>
-                                            <a class="dropdown-item" href="#">Something else here</a>
-                                        </div>
                                     </div>
                                 </div>
                                 <!-- Card Body -->
@@ -256,7 +288,7 @@
 
 
     <!-- Bootstrap core JavaScript-->
-    <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="../vendor/jquery/jquery.min.js"></script>
     <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
     <!-- Core plugin JavaScript-->
@@ -296,11 +328,11 @@
                         type: 'success',
                         html: 'You selected: ' + result.value
                     });
-                    location.href = result.value + "-Teble.html";                  
-                };                   
+                    location.href = result.value + "-Teble.html";
+                };
             })
-        }      
-        
+        }
+
     </script>
 
 

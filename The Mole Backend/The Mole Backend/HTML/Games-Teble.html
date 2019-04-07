@@ -37,6 +37,9 @@
 
     <script>
         $(document).ready(function () {
+            var pic = localStorage.getItem("AdminPic");
+            $("#AdminPic").attr('src', pic);
+
             //getting all games
             ajaxCall("GET", "../api/Games", "", getSuccess, error);
         });
@@ -98,7 +101,7 @@
                         <li class="nav-item dropdown no-arrow">
                             <a class="nav-link dropdown-toggle" href="dashboard.html" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <span class="mr-2 d-none d-lg-inline text-gray-600 small">Back to Dashboard</span>
-                                <img class="img-profile rounded-circle" src="https://source.unsplash.com/QAB-WJcbgJk/60x60">
+                                <img id="AdminPic" class="img-profile rounded-circle">
                             </a>
                         </li>
                     </ul>

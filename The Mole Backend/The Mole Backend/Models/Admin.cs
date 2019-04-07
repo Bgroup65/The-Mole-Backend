@@ -25,6 +25,12 @@ namespace AdminPage.Models
             set { nickName = value; }
         }
 
+        string url;
+        public string URL{
+            get { return url; }
+            set { url = value; }
+        }
+
 
         public Admin()
         {
@@ -41,6 +47,14 @@ namespace AdminPage.Models
         {
             DBservices db = new DBservices();
             return db.CheckUser(adminMail, adminPassword);
+        }
+
+        public Admin GetAdmin(string email)
+        {
+            DBservices db = new DBservices();
+            Admin a = new Admin();
+            a = db.GetAdmin("TheMoleConnection", "Admin", email);
+            return a;
         }
     }
 }

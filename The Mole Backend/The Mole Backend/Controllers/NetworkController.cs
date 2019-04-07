@@ -27,10 +27,10 @@ namespace The_Mole_Backend.Controllers
             {
                 throw new Exception("problem with get100paths, the error: " + ex);
             }
-            
+
         }
 
-        public IEnumerable<List<string>> GetPaths(string source,string target,string categoryName)
+        public IEnumerable<List<string>> GetPaths(string source, string target, string categoryName)
         {
             try
             {

@@ -18,6 +18,8 @@
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="../Scripts/ajaxCalls.js"></script>
     <script>
+        var Admin = {};
+
         $(document).ready(function () {
             $("#user").submit(f1);
         });
@@ -48,8 +50,9 @@
                 $("#inputPassword").val('');
             }
             else {
-                var userInDB = JSON.parse(data);
+                var userInDB = JSON.stringify(Admin);
                 swal("Welcome!", "", "success");
+                localStorage.setItem("user", userInDB);
                 location.href = "dashboard.html";     
             }
         }

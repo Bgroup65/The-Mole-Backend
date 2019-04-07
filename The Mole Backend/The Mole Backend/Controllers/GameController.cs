@@ -29,6 +29,30 @@ namespace AdminPage.Controllers
             }
         }
 
+
+        // GET Month Games: api/Game
+        [Route("api/GamesThismonth")]
+        public int GetMonthGames()
+        {
+            try
+            {
+                int numofPlayers;
+                Game g = new Game();
+                numofPlayers = g.MonthGames();
+                return numofPlayers;
+            }
+            catch (Exception ex)
+            {
+
+                throw new Exception("GET Games error: ", ex);
+            }
+        }
+
+
+
+
+
+
         // GET: api/Game/5
         public string Get(int id)
         {

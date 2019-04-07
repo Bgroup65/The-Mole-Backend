@@ -213,6 +213,7 @@ public class DBservices
             }
         }
     }
+
     public int insertAvatar(string avatarUrl, string uid)
     {
         SqlConnection con;
@@ -525,5 +526,175 @@ public class DBservices
         }
        
 
+    }
+
+
+    //---------------------------------------------------------------------------------
+    // Read Players WHO SIGNED UP TODAY from the DB into a list - dataReader with Filter
+    //---------------------------------------------------------------------------------
+    public List<Player> TodaysPlayers(string conString, string tableName)
+    {
+
+        SqlConnection con = null;
+        List<Player> lp = new List<Player>();
+        try
+        {
+            con = connect(conString); // create a connection to the database using the connection String defined in the web config file
+
+            String selectSTR = "SELECT DISTINCT UserEmail, UserNickname, LastLogin FROM " + tableName + "  WHERE datediff(hour,lastlogin,getdate())<=24";
+            SqlCommand cmd = new SqlCommand(selectSTR, con);
+
+            // get a reader
+            SqlDataReader dr = cmd.ExecuteReader(CommandBehavior.CloseConnection); // CommandBehavior.CloseConnection: the connection will be closed after reading has reached the end
+
+            while (dr.Read())
+            {   // Read till the end of the data into a row
+                Player p = new Player();
+                p.Email = dr["UserEmail"].ToString();
+                p.NickName = dr["UserNickname"].ToString();
+                p.LastLogin = dr["LastLogin"].ToString();
+
+                lp.Add(p);
+            }
+
+            return lp;
+        }
+        catch (Exception ex)
+        {
+            // write to log
+            throw (ex);
+        }
+        finally
+        {
+            if (con != null)
+            {
+                con.Close();
+            }
+        }
+    }
+
+    //---------------------------------------------------------------------------------
+    // Read Players WHO SIGNED IN This MONTH from the DB into a list - dataReader with Filter
+    //---------------------------------------------------------------------------------
+    public List<Player> MonthPlayers(string conString, string tableName)
+    {
+
+        SqlConnection con = null;
+        List<Player> lp = new List<Player>();
+        try
+        {
+            con = connect(conString); // create a connection to the database using the connection String defined in the web config file
+
+            String selectSTR = "SELECT DISTINCT * FROM " + tableName + "  WHERE datediff(DAY,CreatedAt,getdate())<=30";
+            SqlCommand cmd = new SqlCommand(selectSTR, con);
+
+            // get a reader
+            SqlDataReader dr = cmd.ExecuteReader(CommandBehavior.CloseConnection); // CommandBehavior.CloseConnection: the connection will be closed after reading has reached the end
+
+            while (dr.Read())
+            {   // Read till the end of the data into a row
+                Player p = new Player();
+                p.Email = dr["UserEmail"].ToString();
+                p.NickName = dr["UserNickname"].ToString();
+                p.CreatedAt1 = dr["CreatedAt"].ToString();
+
+                lp.Add(p);
+            }
+
+            return lp;
+        }
+        catch (Exception ex)
+        {
+            // write to log
+            throw (ex);
+        }
+        finally
+        {
+            if (con != null)
+            {
+                con.Close();
+            }
+        }
+    }
+
+    //---------------------------------------------------------------------------------
+    // Read Games WHO Created This MONTH from the DB into a list - dataReader with Filter
+    //---------------------------------------------------------------------------------
+    public List<Game> MonthGames(string conString, string tableName)
+    {
+
+        SqlConnection con = null;
+        List<Game> lg = new List<Game>();
+        try
+        {
+            con = connect(conString); // create a connection to the database using the connection String defined in the web config file
+
+            String selectSTR = "SELECT DISTINCT * FROM " + tableName + "  WHERE datediff(DAY,GameDate,getdate())<=30";
+            SqlCommand cmd = new SqlCommand(selectSTR, con);
+
+            // get a reader
+            SqlDataReader dr = cmd.ExecuteReader(CommandBehavior.CloseConnection); // CommandBehavior.CloseConnection: the connection will be closed after reading has reached the end
+
+            while (dr.Read())
+            {   // Read till the end of the data into a row
+                Game g = new Game();
+                g.Id = Convert.ToInt32(dr["GameID"]);
+                g.GameDate = dr["GameDate"].ToString();
+                
+                lg.Add(g);
+            }
+
+            return lg;
+        }
+        catch (Exception ex)
+        {
+            // write to log
+            throw (ex);
+        }
+        finally
+        {
+            if (con != null)
+            {
+                con.Close();
+            }
+        }
+    }
+
+    public Admin GetAdmin(string conString, string tableName, string email)
+    {
+
+        SqlConnection con = null;
+        Admin a = new Admin();
+        try
+        {
+            con = connect(conString); // create a connection to the database using the connection String defined in the web config file
+
+            String selectSTR = "SELECT * FROM " + tableName + "  WHERE AdminEmail= '" + email +"'";
+
+            SqlCommand cmd = new SqlCommand(selectSTR, con);
+
+            // get a reader
+            SqlDataReader dr = cmd.ExecuteReader(CommandBehavior.CloseConnection); // CommandBehavior.CloseConnection: the connection will be closed after reading has reached the end
+
+            while (dr.Read())
+            {   // Read till the end of the data into a row
+                a.NickName = dr["AdminNickname"].ToString();
+                a.URL = dr["Pic"].ToString();
+            }
+
+            return a;
+        }
+        catch (Exception ex)
+        {
+            // write to log
+            throw (ex);
+        }
+        finally
+        {
+            if (con != null)
+            {
+                con.Close();
+            }
+        }
     }
 }
