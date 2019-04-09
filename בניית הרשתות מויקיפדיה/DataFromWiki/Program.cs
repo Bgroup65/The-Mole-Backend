@@ -80,7 +80,7 @@ namespace DataFromWiki
             foreach (var pageTitle in pageTitles)
             {
                 var pageInfo = wiki.Query.allpages().
-                //גורם לקחת את הערל בדיוק כפי שרשום ולא חלק מהערך או משהו שמכיל את זה
+                //גורם לקחת את הערך בדיוק כפי שרשום ולא חלק מהערך או משהו שמכיל את זה
                 //תבחר לי את הדף שהכותרת שלו בדיוק כמו שכתבתי לך
                 Where(page => page.from == pageTitle.TrimEnd() && page.to==pageTitle.TrimEnd()).Pages.
                 //עבור הדף הזה תעשה לי שליפה של הפרטים הבאים:
@@ -102,7 +102,7 @@ namespace DataFromWiki
                     pi.Add(article);
                 }
             }
-            //החזרת הרשימת ערכים שיצרנו
+            //החזרת רשימת הערכים שיצרנו
             return pi;
         }
         //getting pages id for the networks

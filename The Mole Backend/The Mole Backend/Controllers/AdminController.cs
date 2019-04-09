@@ -58,7 +58,7 @@ namespace AdminPage.Controllers
             }
             catch (Exception ex)
             {
-                throw new Exception("קרתה בעיה בעת כניסת המשתמש למערכת");
+                throw new Exception("קרתה בעיה בעת כניסת המשתמש למערכת",ex);
             }
         }
     }

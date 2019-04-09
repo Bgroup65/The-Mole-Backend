@@ -116,7 +116,8 @@ namespace The_Mole_Backend.Models
             //הכרזה על גרף עם משקולת של 1 על כל קשת כדי להריץ את אלגוריתם הדיקסטרה
             //1. create a graph
             var graph = new WeightedDiGraph<string, int>();
-            //הוספה לגרף את כל הצמתים שהבנו מהדאתא בייס
+
+            //הוספה לגרף את כל הצמתים שהבאנו מהדאתא בייס
             //2. insert vertecies to the graph
             foreach (string vertex in vertecies)
             {

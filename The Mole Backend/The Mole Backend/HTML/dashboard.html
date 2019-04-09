@@ -122,13 +122,12 @@
                     <ul class="navbar-nav ml-auto">
                         <!-- Nav Item - User Information -->
                         <li class="nav-item dropdown no-arrow">
-                            <a class="nav-link dropdown-toggle" href="login.html" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                                <span id="AdminName" class="mr-2 d-none d-lg-inline text-gray-600 small"></span>
+                            <div class="nav-link dropdown-toggle" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                <a id="AdminName" class="mr-2 d-none d-lg-inline text-gray-600 small"></a>
                                 <div class="topbar-divider d-none d-sm-block"></div>
-                                <span class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400">Logout</span>
+                                <a id="out" href="#" class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400">Logout</a>
                                 <img id="AdminPic" class="img-profile rounded-circle">
-                                </a>
-
+                            </div>
                         </li>
                     </ul>
 
@@ -283,7 +282,6 @@
 
         </div>
         <!-- End of Content Wrapper -->
-
     </div>
 
 
@@ -304,34 +302,51 @@
     <script src="js/demo/chart-area-demo.js"></script>
     <script src="js/demo/chart-pie-demo.js"></script>
 
-    <!--Data Retrivel-->
+    <!--JQuery functions-->
     <script>
         function DataRet() {
-            swal({
-                title: 'Select data to retrieve',
-                input: 'select',
-                inputOptions: { 'Users': 'Users', 'Games': 'Games', 'Vertecies in Games': 'Vertecies in Games' },
-                inputPlaceholder: 'required',
-                showCancelButton: true,
-                inputValidator: function (value) {
-                    return new Promise(function (resolve) {
-                        if (value !== '') {
-                            resolve();
-                        } else {
-                            resolve('You need to select something');
-                        }
-                    });
-                }
-            }).then(function (result) {
-                if (result.value != undefined) {
-                    swal({
-                        type: 'success',
-                        html: 'You selected: ' + result.value
-                    });
-                    location.href = result.value + "-Teble.html";
-                };
-            })
+                        swal({
+                            title: 'Select data to retrieve',
+                            input: 'select',
+                            inputOptions: { 'Users': 'Users', 'Games': 'Games', 'Vertecies in Games': 'Vertecies in Games' },
+                            inputPlaceholder: 'required',
+                            showCancelButton: true,
+                            inputValidator: function (value) {
+                                return new Promise(function (resolve) {
+                                    if (value !== '') {
+                                        resolve();
+                                    } else {
+                                        resolve('You need to select something');
+                                    }
+                                });
+                            }
+                        }).then(function (result) {
+                            if (result.value != undefined) {
+                                swal({
+                                    type: 'success',
+                                    html: 'You selected: ' + result.value
+                                });
+                                location.href = result.value + "-Teble.html";
+                            };
+                            })
         }
+
+            $('#out').click(function () {
+                swal({
+                    title: 'Are you sure you want to leave?',
+                    type: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: "Logout",
+                }).then(function (isConfirm) {
+                    if (isConfirm.value == null) {
+                        return;
+                    }
+                    else location.href = "login.html";
+                })
+            })
+
 
     </script>
 
