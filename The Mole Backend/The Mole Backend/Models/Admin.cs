@@ -56,5 +56,13 @@ namespace AdminPage.Models
             a = db.GetAdmin("TheMoleConnection", "Admin", email);
             return a;
         }
+
+        public string GetPas(string adminMail)
+        {
+            DBservices db = new DBservices();
+            Admin a = new Admin();
+            a = db.GetPass(adminMail);
+            return a.password;
+        }
     }
 }

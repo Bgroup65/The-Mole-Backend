@@ -355,6 +355,45 @@ public class DBservices
     }
 
     //---------------------------------------------------------------------------------
+    // Get Password if someone forget it
+    //---------------------------------------------------------------------------------
+    public Admin GetPass(string adminMail)
+    {
+        Admin a = new Admin();
+        SqlConnection con = null;
+        try
+        {
+            con = connect("TheMoleConnection"); // create a connection to the database using the connection String defined in the web config file
+            string query = "select * from Admin where AdminEmail ='" + adminMail + "'";
+            SqlCommand cmd = new SqlCommand(query, con);
+
+            // get a reader
+            SqlDataReader dr = cmd.ExecuteReader(CommandBehavior.CloseConnection); // CommandBehavior.CloseConnection: the connection will be closed after reading has reached the end
+
+            while (dr.Read())               
+            {   // Read till the end of the data into a row
+                a.Email = dr["AdminEmail"].ToString();
+                a.Password = dr["AdminPassword"].ToString();
+            }
+
+            return a;
+        }
+        catch (Exception ex)
+        {
+            // write to log
+            throw (ex);
+        }
+        finally
+        {
+            if (con != null)
+            {
+                con.Close();
+            }
+
+        }
+    }
+
+    //---------------------------------------------------------------------------------
     // Read Players from the DB into a list - dataReader withOut Filter
     //---------------------------------------------------------------------------------
     public List<Player> GetPlayers(string conString, string tableName)
