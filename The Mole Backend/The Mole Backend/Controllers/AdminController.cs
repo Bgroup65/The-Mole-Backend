@@ -61,21 +61,5 @@ namespace AdminPage.Controllers
                 throw new Exception("קרתה בעיה בעת כניסת המשתמש למערכת",ex);
             }
         }
-
-        //Check Admins LogIn
-        [HttpGet]
-        public string GetPas(string adminMail)
-        {
-            try
-            {
-                Admin a = new Admin();
-                string password = a.GetPas(adminMail);
-                return password;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("קרתה בעיה בעת כניסת המשתמש למערכת", ex);
-            }
-        }
     }
 }

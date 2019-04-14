@@ -27,10 +27,10 @@ namespace The_Mole_Backend.Controllers
             {
                 throw new Exception("problem with get100paths, the error: " + ex);
             }
-
+            
         }
 
-        public IEnumerable<List<string>> GetPaths(string source, string target, string categoryName)
+        public IEnumerable<List<string>> GetPaths(string source,string target,string categoryName)
         {
             try
             {
@@ -46,7 +46,45 @@ namespace The_Mole_Backend.Controllers
                 throw new Exception("problem with GetTwoPaths, the error: " + ex);
             }
         }
+        [HttpGet]
+        [Route("api/networkStartAGame")]
+        public IEnumerable<List<string>> StartAGame(string categoryName)
+        {
+            try
+            {
+                MainAlgorithm mainAlgorithm = new MainAlgorithm();
+                List<List<string>> StartPaths = new List<List<string>>();
+                StartPaths = mainAlgorithm.StartAGame(categoryName);
 
+                return StartPaths;
+            }
+            catch (Exception ex)
+            {
+
+                throw new Exception("problem with StartAGame, the error: " + ex);
+            }
+        }
+
+        [HttpGet]
+        [Route("api/networkGetRandomVerteciesFromVertex")]
+        public List<string> GetRandomVerteciesFromVertex(string source, string categoryName)
+        {
+            try
+            {
+                MainAlgorithm mainAlgorithm = new MainAlgorithm();
+                List<string> moreVertecies = new List<string>();
+                moreVertecies = mainAlgorithm.getThreeMoreRandom(source,categoryName);
+
+                return moreVertecies;
+            }
+            catch (Exception ex)
+            {
+
+                throw new Exception("problem with GetRandomVerteciesFromVertex, the error: " + ex);
+            }
+        }
+
+        //random vertecies from the same category
         public string[] GetRandomVertecies(string categoryName)
         {
             try

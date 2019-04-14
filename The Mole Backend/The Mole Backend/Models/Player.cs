@@ -13,6 +13,7 @@ namespace AdminPage.Models
         string lastLogin;
         string locale;
         string profilePic;
+        string avatarPic;
         int id;
         public int Id{
             get { return id; }
@@ -103,7 +104,6 @@ namespace AdminPage.Models
             int rowAffected = db.insert(this);
             return rowAffected;
         }
-
         public string GetToken(string uid)
         {
             DBservices db = new DBservices();
@@ -132,7 +132,6 @@ namespace AdminPage.Models
             int rowAffected = db.insertLastLogin(uid);
             return rowAffected;
         }
-
         public List<Player> Read()
         {
             DBservices dbs = new DBservices();
@@ -140,7 +139,6 @@ namespace AdminPage.Models
             return lp;
 
         }
-
         //Count how many players signed up today
         public int TodaysPlayers()
         {

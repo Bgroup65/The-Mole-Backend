@@ -15,16 +15,23 @@
                 ProfilePic: "some picture",
                 Uid:"something else"
             }
+            var p1 = {
+                Token: "ne",
+                Uid:"sapir"
+            }
+
             //ajaxCall("POST", "../api/Player", JSON.stringify(p), success, error);
-            //ajaxCall("POST", "../api/Player?token=netta&uid=sapir", "", success, error);
+            //ajaxCall("POST", "../api/PlayerToken", JSON.stringify(p1), success, error);
             //ajaxCall("POST", "../api/Player?avatarUrl=netta&uid=sapir", "", success, error);
             //ajaxCall("POST", "../api/Player?uid=sapir", "", success, error);
             //var uid = "something else";
             //ajaxCall("Get", "../api/Player/?uid=" + uid, "", success, error);
+            //ajaxCall("Get", "../api/networkStartAGame/?categoryName=NBA", "", success, error);
+            ajaxCall("Get", "../api/networkGetRandomVerteciesFromVertex/?source=Lebron James&categoryName=NBA", "", success, error);
             //randomVertecies();
             //Path();
             //randomPaths();
-            webScrape();
+            //webScrape();
         });
         function Path() {
             var source = "Curly Armstrong";

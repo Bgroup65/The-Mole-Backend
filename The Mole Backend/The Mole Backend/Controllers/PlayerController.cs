@@ -28,9 +28,8 @@ namespace AdminPage.Controllers
                 throw new Exception("GET ALL players error: ",ex);
             }
         }
-
         [HttpGet]
-        [Route("api/Player")]
+        [Route("api/PlayerGetToken")]
         public string GetToken(string uid)
         {
             try
@@ -44,7 +43,6 @@ namespace AdminPage.Controllers
                 throw new Exception("GetToken error: ",ex);
             }
         }
-
         //insert new player
         [HttpPost]
         [Route("api/player")]
@@ -57,58 +55,56 @@ namespace AdminPage.Controllers
 
             catch (Exception ex)
             {
-                throw new Exception("בעיה בהכנסת הנתונים למערכת", ex);
+                throw new Exception("בעיה בהכנסת הנתונים למערכת");
             }
         }
 
         //insert token player
         [HttpPost]
-        [Route("api/player")]
-        public void Post(string token,string uid)
+        [Route("api/playerToken")]
+        public void PostToken([FromBody]Player p)
         {
             try
             {
-                Player p = new Player();
-                p.InsertToken(token, uid);
+                
+                p.InsertToken(p.Token, p.Uid);
             }
 
             catch (Exception ex)
             {
-                throw new Exception("Post ", ex);
+                throw new Exception("Post ");
             }
         }
 
-        //insert avatar player
+        ////insert avatar player
+        //[HttpPost]
+        //[Route("api/playerAvatar")]
+        //public void PostAvatar([FromBody] Player p )
+        //{
+        //    try
+        //    {
+        //        p.InsertAvatar(p., uid);
+        //    }
+
+        //    catch (Exception ex)
+        //    {
+        //        throw new Exception("בעיה בהכנסת הנתונים למערכת");
+        //    }
+        //}
+
+        //insert last login player
         [HttpPost]
-        [Route("api/player")]
-        public void PostAvatar(string avatarUrl, string uid)
+        [Route("api/playerLastLogin")]
+        public void PostLastLogin([FromBody] Player p )
         {
             try
             {
-                Player p = new Player();
-                p.InsertAvatar(avatarUrl, uid);
+                p.InsertLastLogin(p.Uid);
             }
 
             catch (Exception ex)
             {
-                throw new Exception("בעיה בהכנסת הנתונים למערכת", ex);
-            }
-        }
-
-        //insert avatar player
-        [HttpPost]
-        [Route("api/player")]
-        public void PostLastLogin(string uid)
-        {
-            try
-            {
-                Player p = new Player();
-                p.InsertLastLogin(uid);
-            }
-
-            catch (Exception ex)
-            {
-                throw new Exception("בעיה בהכנסת הנתונים למערכת", ex);
+                throw new Exception("בעיה בהכנסת הנתונים למערכת");
             }
         }
 
@@ -147,7 +143,6 @@ namespace AdminPage.Controllers
                 throw new Exception("GET Players error: ", ex);
             }
         }
-
 
 
 

@@ -13,7 +13,7 @@ namespace The_Mole_Backend.Models
         public string Source2 { get; set; }
         public string Target { get; set; }
         static Random random = new Random();
-
+        
         public MainAlgorithm(string source, string target)
         {
             Source = source;
@@ -24,14 +24,11 @@ namespace The_Mole_Backend.Models
 
         }
 
-
         /// <summary>
         /// getting rendom paths of only two-direction vertecies for testing
         /// </summary>
         /// <param name="Paths">empty list of paths to fill</param>
         /// <returns></returns>
-        /// 
-        //test for benny
         public List<int> GetPathsAdvancedIntersect(ref List<List<string>> Paths)
         {
             List<string> vertecies = new List<string>();
@@ -99,72 +96,55 @@ namespace The_Mole_Backend.Models
         /// </summary>
         /// <param name="Paths">empty list of paths to fill</param>
         /// <returns></returns>
-        /// מחזיר הפניה לרשימה של כל הדרכים
         public List<int> GetPathsSimple(ref List<List<string>> Paths)
         {
-            //רשימת ערכים
             List<string> vertecies = new List<string>();
-            //הקשתות - רשימה של רשימה
             List<List<string>> edges = new List<List<string>>();
-            //שליפה מהדאתא בייס של כל הצמתים מאותה קטגוריה
-            //בעתיד נשנה את זה מPoliticiansEdges לערך שאותו נקבל
+
             // get all vertecies and edges from DB
             DBservices db = new DBservices();
             vertecies = db.GetAllVertecies("TheMoleConnection", "PoliticiansVertecies");
             edges = db.GetEdges("TheMoleConnection", "PoliticiansEdges");
 
-            //הכרזה על גרף עם משקולת של 1 על כל קשת כדי להריץ את אלגוריתם הדיקסטרה
             //1. create a graph
             var graph = new WeightedDiGraph<string, int>();
-
-            //הוספה לגרף את כל הצמתים שהבאנו מהדאתא בייס
             //2. insert vertecies to the graph
             foreach (string vertex in vertecies)
             {
                 graph.AddVertex(vertex);
             }
-            //הוספת כל הקשתות - מכיל ממי יצאתי, למי אני יוצא, ומשקל על הקשת 1
             //3. insert edges to the graph
             foreach (var edge in edges)
             {
                 graph.AddEdge(edge[0], edge[1], 1);
             }
-            //יצירת האלגוריתם הדיקסטרה באמצעות סיפריית 
-            //using Advanced.Algorithms.DataStructures.Graph.AdjacencyList;
-            //using Advanced.Algorithms.Graph;
+
             //4. create dijkstra algorithm
             var algorithm = new DijikstraShortestPath<string, int>(new DijikstraShortestPathOperators());
 
-            //רשימה אשר סופרת בכל הדרכים כמה ערכים ישלי
-            //מכילה את התוצאות של הדיקסטרה
-            List<int> pathsCount = new List<int>();
 
-            //הרצת האלגוריתם על 200 דרכים כטסט לראות מה הדרכים הכי קצרות
+            List<int> pathsCount = new List<int>();
+            //var result = algorithm.FindShortestPath(graph, Source, Target);
+            //pathsCount.Add(result.Path.Count);
+            //Paths.Add(result.Path
+
             //5.run the algoritm for 110 random vertecies.
             for (int i = 0; i < 200; i++)
             {
-                //קבלת ערך רנדומלי מהרשימה שייצאנו מהדאא בייס מאינדקס 0 ועד הסוף
                 int sourceVertex = random.Next(0, vertecies.Count);
                 int targetVertex = random.Next(0, vertecies.Count);
-
-                //בדיקת מקרה קצה שהערכים שונים
-                //אם שונה מפעיל את האלגוריתם דיקסטרה מלמעלה
                 //if source and target pages are the same DON'T run the algorithm
                 if (sourceVertex != targetVertex)
                 {
                     List<string> pathsTwo = new List<string>();
                     var result = algorithm.FindShortestPath(graph, vertecies[sourceVertex], vertecies[targetVertex]);
-                    //הוספת תכונה לרשימת הערכים בדרך מסויימת - כמה צעדים זה לקח
                     pathsCount.Add(result.Path.Count);
-                    //מקרה קצה - אם אין ערך שמפריד בין ערך ההתחלה והסיום - בלי לעבור בשום ערך אחר בדרך
-                    //נוסיף לליסט שיצרנו את ההערך התחלה וערך הסיום עם כמות צעדים של 1
                     if (result.Path.Count == 1)
                     {
                         pathsTwo.Add(vertecies[sourceVertex]);
                         pathsTwo.Add(vertecies[targetVertex]);
                         Paths.Add(pathsTwo);
                     }
-                    //אחרת לא מדובר במקרה קצה ונכניס רגיל
                     else Paths.Add(result.Path);
 
                 }
@@ -180,14 +160,11 @@ namespace The_Mole_Backend.Models
         /// <param name="traget"> target vertex</param>
         /// <param name="categoryName">choose from: NBA,Politicans,GeneralKnowledge,Movies,Music,Celeb</param>
         /// <returns></returns>
-        //הרצה של הדיקסטרה פעם אחת בלבד
-        public List<List<string>> GetPath(string source, string target, string categoryName)
+        public List<List<string>> GetPath(string source, string target,string categoryName)
         {
-
             List<List<string>> TwoPaths = new List<List<string>>();
             string edgeCategoryName = "";
             string verteciesCategoryName = "";
-            //ממירים את הערך שקיבלנו בדיוק לשם הטבלה בדאתא בייס
             switch (categoryName.ToUpper())
             {
                 case "NBA":
@@ -213,12 +190,9 @@ namespace The_Mole_Backend.Models
                 default:
                     break;
             }
-            //פה נשמור את הדרך שלנו
             List<string> path = new List<string>();
-
             //get all vertecies and edges from db
             DBservices db = new DBservices();
-            //קריאה מדאתא בייס על ידי הקטגוןריה שקיבלנו מהמשתמש
             //get edges and vertecies for the given category
             List<string> vertecies = this.GetVerteciesForCategory("TheMoleConnection", verteciesCategoryName);
             List<List<string>> edges = this.GetEdgesForCategory("TheMoleConnection", edgeCategoryName);
@@ -237,9 +211,16 @@ namespace The_Mole_Backend.Models
             //create dijkstra algorithm
             var algorithm = new DijikstraShortestPath<string, int>(new DijikstraShortestPathOperators());
 
+            List<string> pathsTwo = new List<string>();
+            var result = algorithm.FindShortestPath(graph,source,target);
+            if (result.Path.Count == 1)
+            {
+                pathsTwo.Add(source);
+                pathsTwo.Add(target);
+                TwoPaths.Add(pathsTwo);
+            }
 
-            var result = algorithm.FindShortestPath(graph, source, target);
-            TwoPaths.Add(result.Path);
+            else TwoPaths.Add(result.Path);
 
             return TwoPaths;
         }
@@ -249,11 +230,8 @@ namespace The_Mole_Backend.Models
         /// </summary>
         /// <param name="categoryName"></param>
         /// <returns></returns>
-        //מקבל קטגוריה ומחזיר 6 צמתים רנדומלים מהDB
-        //3 לכל שחקן
         public string[] GetRandomVertecies(string categoryName)
         {
-
             string[] sixVertecies = new string[6];
             string verteciesCategoryName = "";
             switch (categoryName.ToUpper())
@@ -297,13 +275,11 @@ namespace The_Mole_Backend.Models
         /// <param name="connectionString"></param>
         /// <param name="categoryName"></param>
         /// <returns></returns>
-        //מחזיר את כל הצמתים הקיימים בקטגוריה מסויימת בדאתא בייס
-        public List<string> GetVerteciesForCategory(string connectionString, string categoryName)
+        public List<string> GetVerteciesForCategory(string connectionString,string categoryName)
         {
             List<string> vertecies = new List<string>();
             DBservices db = new DBservices();
             vertecies = db.GetAllVertecies(connectionString, categoryName);
-
 
             return vertecies;
         }
@@ -314,8 +290,7 @@ namespace The_Mole_Backend.Models
         /// <param name="connectionString"></param>
         /// <param name="categoryName"></param>
         /// <returns></returns>
-        //מביא את כל הקשתות הקיימות בדאתא בייס בקטגוריה מסויימת
-        public List<List<string>> GetEdgesForCategory(string connectionString, string categoryName)
+        public List<List<string>> GetEdgesForCategory(string connectionString,string categoryName)
         {
 
             List<List<string>> edges = new List<List<string>>();
@@ -326,10 +301,152 @@ namespace The_Mole_Backend.Models
             return edges;
         }
 
+        public List<List<string>> StartAGame(string categoryName)
+        {
+            List<List<string>> StartVerteciesAndPaths = new List<List<string>>();
+            string edgeCategoryName = "";
+            string verteciesCategoryName = "";
+            switch (categoryName.ToUpper())
+            {
+                case "NBA":
+                    edgeCategoryName = "NBAEdges";
+                    verteciesCategoryName = "NBAVertecies";
+                    break;
+                case "GENERALKNOWLEDGE":
+                    edgeCategoryName = "GeneralEdges";
+                    verteciesCategoryName = "GeneralVertecies";
+                    break;
+                case "MOVIES":
+                    edgeCategoryName = "MoviesEdges";
+                    verteciesCategoryName = "MoviesVertecies";
+                    break;
+                case "MUSIC":
+                    edgeCategoryName = "MusicEdges";
+                    verteciesCategoryName = "MusicVertecies";
+                    break;
+                case "CELEB":
+                    edgeCategoryName = "CelebEdges";
+                    verteciesCategoryName = "CelebVertecies";
+                    break;
+                default:
+                    break;
+            }
+            DBservices db = new DBservices();
+            //get edges and vertecies for the given category
+            List<string> vertecies = this.GetVerteciesForCategory("TheMoleConnection", verteciesCategoryName);
+            List<List<string>> edges = this.GetEdgesForCategory("TheMoleConnection", edgeCategoryName);
+            //create a graph 
+            var graph = new WeightedDiGraph<string, int>();
+            //insert vertecies to the graph
+            foreach (string vertex in vertecies)
+            {
+                graph.AddVertex(vertex);
+            }
+            //insert edges to the graph
+            foreach (var edge in edges)
+            {
+                graph.AddEdge(edge[0], edge[1], 1);
+            }
+            //create dijkstra algorithm
+            var algorithm = new DijikstraShortestPath<string, int>(new DijikstraShortestPathOperators());
+            bool isDone = false;
+            while (!isDone)
+            {
+                int sourceVertex = random.Next(0, vertecies.Count);
+                int targetVertex = random.Next(0, vertecies.Count);
+                if (sourceVertex != targetVertex)
+                {
+                    
+                    List<string> pathsTwo = new List<string>();
+                    var result = algorithm.FindShortestPath(graph, vertecies[sourceVertex], vertecies[targetVertex]);
+                    var result1 = algorithm.FindShortestPath(graph, vertecies[targetVertex], vertecies[sourceVertex]);
 
+                    if (result.Path.Count == result1.Path.Count)
+                    {
+                        isDone = true;
+                        if (result.Path.Count == 1)
+                        {
+                            //pathsTwo.Add(vertecies[sourceVertex]);
+                            //pathsTwo.Add(vertecies[targetVertex]);
+                            //StartVerteciesAndPaths.Add(pathsTwo);
+                            //pathsTwo.Clear();
+                            //pathsTwo.Add(vertecies[targetVertex]);
+                            //pathsTwo.Add(vertecies[sourceVertex]);
+                            //StartVerteciesAndPaths.Add(pathsTwo);
+
+                            isDone = false;
+                        }
+                        else
+                        {
+                            StartVerteciesAndPaths.Add(result.Path);
+                            StartVerteciesAndPaths.Add(result1.Path);
+                        }
+                    }
+                }
+            }
+            List<string> edgesForFirstVertex = this.getThreeMoreRandom(StartVerteciesAndPaths[0][0], categoryName);
+            List<string> edgesForSecondVertex = this.getThreeMoreRandom(StartVerteciesAndPaths[1][0], categoryName);
+            StartVerteciesAndPaths.Add(edgesForFirstVertex);
+            StartVerteciesAndPaths.Add(edgesForSecondVertex);
+
+            return StartVerteciesAndPaths;
+        }
+
+        //
+        public List<string> getThreeMoreRandom(string source,string categoryName)
+        {
+            List<string> threeMoreRandom = new List<string>();
+            string edgeCategoryName = "";
+            switch (categoryName.ToUpper())
+            {
+                case "NBA":
+                    edgeCategoryName = "NBAEdges";
+                    break;
+                case "GENERALKNOWLEDGE":
+                    edgeCategoryName = "GeneralEdges";
+                    break;
+                case "GENERAL KNOWLEDGE":
+                    edgeCategoryName = "GeneralEdges";
+                    break;
+                case "MOVIES":
+                    edgeCategoryName = "MoviesEdges";
+                    break;
+                case "FILMS":
+                    edgeCategoryName = "MoviesEdges";
+                    break;
+                case "MUSIC":
+                    edgeCategoryName = "MusicEdges";
+                    break;
+                case "CELEB":
+                    edgeCategoryName = "CelebEdges";
+                    break;
+                default:
+                    break;
+            }
+            DBservices db = new DBservices();
+            //get edges for the given category and source
+            List<string> edges = db.GetEdgesForCategoryAndSource("TheMoleConnection", edgeCategoryName, source);
+
+            bool isListReady = false;
+            int counter = 0;
+            while (!isListReady)
+            {
+                
+                int edgeIndex = random.Next(0, edges.Count);
+                if (!threeMoreRandom.Contains(edges[edgeIndex]))
+                {
+                    threeMoreRandom.Add(edges[edgeIndex]);
+                    counter++;
+                }
+                if (counter == 2)
+                {
+                    isListReady = true;
+                }
+            }
+            return threeMoreRandom;
+        }
     }
 
-    //קשור לסיפרייה - משהו שאמרו שצריך להכניס כשהורדנו את הסיפרייה 
     //helper for the algorithm
     public class DijikstraShortestPathOperators : IShortestPathOperators<int>
     {

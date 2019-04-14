@@ -96,6 +96,42 @@ public class DBservices
 
         }
     }
+    public List<string> GetEdgesForCategoryAndSource(string conString, string tableName,string source)
+    {
+        SqlConnection con = null;
+        List<string> edgesList = new List<string>();
+        try
+        {
+            con = connect(conString); // create a connection to the database using the connection String defined in the web config file
+
+            String selectSTR = "SELECT * FROM " + tableName + " where OriginPage='"+source+"'";
+            SqlCommand cmd = new SqlCommand(selectSTR, con);
+
+            // get a reader
+            SqlDataReader dr = cmd.ExecuteReader(CommandBehavior.CloseConnection); // CommandBehavior.CloseConnection: the connection will be closed after reading has reached the end
+            while (dr.Read())
+            {   // Read till the end of the data into a row
+                //string page = Convert.ToString(dr["OriginPage"]);
+                string linkedPage = Convert.ToString(dr["LinkedPage"]);
+                edgesList.Add(linkedPage);
+            }
+
+            return edgesList;
+        }
+        catch (Exception ex)
+        {
+            // write to log
+            throw (ex);
+        }
+        finally
+        {
+            if (con != null)
+            {
+                con.Close();
+            }
+
+        }
+    }
 
     public List<string> GetAllVertecies(string conString, string tableName)
     {
@@ -213,7 +249,6 @@ public class DBservices
             }
         }
     }
-
     public int insertAvatar(string avatarUrl, string uid)
     {
         SqlConnection con;
@@ -338,45 +373,6 @@ public class DBservices
             }
 
             return userInDB;
-        }
-        catch (Exception ex)
-        {
-            // write to log
-            throw (ex);
-        }
-        finally
-        {
-            if (con != null)
-            {
-                con.Close();
-            }
-
-        }
-    }
-
-    //---------------------------------------------------------------------------------
-    // Get Password if someone forget it
-    //---------------------------------------------------------------------------------
-    public Admin GetPass(string adminMail)
-    {
-        Admin a = new Admin();
-        SqlConnection con = null;
-        try
-        {
-            con = connect("TheMoleConnection"); // create a connection to the database using the connection String defined in the web config file
-            string query = "select * from Admin where AdminEmail ='" + adminMail + "'";
-            SqlCommand cmd = new SqlCommand(query, con);
-
-            // get a reader
-            SqlDataReader dr = cmd.ExecuteReader(CommandBehavior.CloseConnection); // CommandBehavior.CloseConnection: the connection will be closed after reading has reached the end
-
-            while (dr.Read())               
-            {   // Read till the end of the data into a row
-                a.Email = dr["AdminEmail"].ToString();
-                a.Password = dr["AdminPassword"].ToString();
-            }
-
-            return a;
         }
         catch (Exception ex)
         {
@@ -563,14 +559,11 @@ public class DBservices
                 con.Close();
             }
         }
-       
-
     }
-
-
     //---------------------------------------------------------------------------------
     // Read Players WHO SIGNED UP TODAY from the DB into a list - dataReader with Filter
     //---------------------------------------------------------------------------------
+
     public List<Player> TodaysPlayers(string conString, string tableName)
     {
 
@@ -611,6 +604,7 @@ public class DBservices
             }
         }
     }
+
 
     //---------------------------------------------------------------------------------
     // Read Players WHO SIGNED IN This MONTH from the DB into a list - dataReader with Filter
@@ -679,7 +673,7 @@ public class DBservices
                 Game g = new Game();
                 g.Id = Convert.ToInt32(dr["GameID"]);
                 g.GameDate = dr["GameDate"].ToString();
-                
+
                 lg.Add(g);
             }
 
@@ -708,7 +702,7 @@ public class DBservices
         {
             con = connect(conString); // create a connection to the database using the connection String defined in the web config file
 
-            String selectSTR = "SELECT * FROM " + tableName + "  WHERE AdminEmail= '" + email +"'";
+            String selectSTR = "SELECT * FROM " + tableName + "  WHERE AdminEmail= '" + email + "'";
 
             SqlCommand cmd = new SqlCommand(selectSTR, con);
 
@@ -736,4 +730,6 @@ public class DBservices
             }
         }
     }
+
+
 }
