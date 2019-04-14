@@ -510,6 +510,7 @@ public class DBservices
                 v.VerteciesId = (Int32)dr["VerteciesId"];
                 v.GameID = (Int32)dr["GameID"];
                 v.VerteciesPosition = (Int32)dr["VerteciesPosition"];
+                v.PlayerId = (Int32)dr["PlayerId"];
 
                 lv.Add(v);
             }

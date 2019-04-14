@@ -38,6 +38,7 @@
 
             //get reuqest to validated active Admin.
             ajaxCall("GET", "../api/admin/?adminMail=" + $("#InputEmail").val() + "&adminPassword=" + $("#InputPassword").val(), "", success, error);
+            });
         }
 
         function error(err) {

@@ -244,6 +244,7 @@
     <Content Include="HTML\forgot-password.html" />
     <Content Include="HTML\Games-Teble.html" />
     <Content Include="HTML\gulpfile.js" />
+    <Content Include="HTML\images\benny.gif" />
     <Content Include="HTML\images\lior.gif" />
     <Content Include="HTML\images\mor.gif" />
     <Content Include="HTML\images\sapir.gif" />
