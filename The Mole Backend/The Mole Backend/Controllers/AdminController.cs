@@ -31,6 +31,7 @@ namespace AdminPage.Controllers
             }
         }
 
+ 
         // POST: api/Admin
         public void Post([FromBody]string value)
         {
@@ -61,5 +62,7 @@ namespace AdminPage.Controllers
                 throw new Exception("קרתה בעיה בעת כניסת המשתמש למערכת",ex);
             }
         }
+
+
     }
 }

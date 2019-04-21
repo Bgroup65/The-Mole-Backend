@@ -694,6 +694,9 @@ public class DBservices
         }
     }
 
+    //---------------------------------------------------------------------------------
+    //getting Admin's NickName & Pic
+    //---------------------------------------------------------------------------------
     public Admin GetAdmin(string conString, string tableName, string email)
     {
 
@@ -714,6 +717,7 @@ public class DBservices
             {   // Read till the end of the data into a row
                 a.NickName = dr["AdminNickname"].ToString();
                 a.URL = dr["Pic"].ToString();
+                a.Password = dr["AdminPassword"].ToString();
             }
 
             return a;
