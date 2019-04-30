@@ -249,6 +249,7 @@ public class DBservices
             }
         }
     }
+
     public int insertAvatar(string avatarUrl, string uid)
     {
         SqlConnection con;
@@ -289,6 +290,7 @@ public class DBservices
             }
         }
     }
+
     public int insertLastLogin(string uid)
     {
         SqlConnection con;

@@ -76,21 +76,22 @@ namespace AdminPage.Controllers
             }
         }
 
-        ////insert avatar player
-        //[HttpPost]
-        //[Route("api/playerAvatar")]
-        //public void PostAvatar([FromBody] Player p )
-        //{
-        //    try
-        //    {
-        //        p.InsertAvatar(p., uid);
-        //    }
+        //insert avatar player
+        [HttpPost]
+        [Route("api/playerAvatar")]
+        public void PostAvatar(string avatarUrl, string uid)
+        {
+            try
+            {
+                Player p = new Player();
+                p.InsertAvatar(avatarUrl, uid);
+            }
 
-        //    catch (Exception ex)
-        //    {
-        //        throw new Exception("בעיה בהכנסת הנתונים למערכת");
-        //    }
-        //}
+            catch (Exception)
+            {
+                throw new Exception("בעיה בהכנסת הנתונים למערכת");
+            }
+        }
 
         //insert last login player
         [HttpPost]

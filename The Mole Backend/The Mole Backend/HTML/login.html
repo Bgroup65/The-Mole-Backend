@@ -32,6 +32,7 @@
         }
 
         function LogIn() {
+            $('#wait').show();
 
             Admin = {
                 Email: $("#InputEmail").val(),
@@ -44,10 +45,12 @@
         }
 
         function error(err) {
+            $('#wait').hide();
             alert("Error in loginUser: " + err.responseText);
         }
 
         function success(data) {
+            $('#wait').hide();
             if (!data) {
                 swal("Something worng with your email or password", " ", "error");
                 $("#inputPassword").val('');
@@ -73,34 +76,37 @@
             <div class="row">
                 <div class="col-lg-6 d-none d-lg-block bg-login-image">
                 </div>
-              <div class="col-lg-6">
-                <div class="p-5">
-                  <div class="text-center">
-                    <h1 class="h4 text-gray-900 mb-4">Welcome!</h1>
-                  </div>
-                  <form id="user">
-                      <div class="form-group">
-                          <input type="email" class="form-control form-control-user" id="InputEmail" aria-describedby="emailHelp" placeholder="Enter Email Address...">
-                      </div>
-                      <div class="form-group">
-                          <input type="password" class="form-control form-control-user" id="InputPassword" placeholder="Password">
-                      </div>
-                      <div class="form-group">
-                          <div class="custom-control custom-checkbox small">
-                              <input type="checkbox" class="custom-control-input" id="customCheck">
-                              <label class="custom-control-label" for="customCheck">Remember Me</label>
-                          </div>
-                      </div>
-                      <button type="submit" class="btn btn-primary btn-user btn-block" id="load" data-loading-text="<i class='fa fa-spinner fa-spin '></i> Processing">
-                          Login
-                      </button>
-                      <hr>
-                  </form>
-                  <div class="text-center">
-                    <a class="small" href="forgot-password.html">Forgot Password?</a>
-                  </div>
+                <div class="col-lg-6">
+                    <div class="p-5">
+                        <div class="text-center">
+                            <h1 class="h4 text-gray-900 mb-4">Welcome!</h1>
+                        </div>
+                        <form id="user">
+                            <div class="form-group">
+                                <input type="email" class="form-control form-control-user" id="InputEmail" aria-describedby="emailHelp" placeholder="Enter Email Address...">
+                            </div>
+                            <div class="form-group">
+                                <input type="password" class="form-control form-control-user" id="InputPassword" placeholder="Password">
+                            </div>
+                            <div class="form-group">
+                                <div class="custom-control custom-checkbox small">
+                                    <input type="checkbox" class="custom-control-input" id="customCheck">
+                                    <label class="custom-control-label" for="customCheck">Remember Me</label>
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-primary btn-user btn-block">
+                                Login
+                            </button>
+                            <hr>
+                        </form>
+                        <!--<div class="text-center">
+                            <a class="small" href="forgot-password.html">Forgot Password?</a>
+                            </div>-->
+                    </div>
+                    <div id="wait" style="display:none;width:69px;height:89px;position:absolute;top:50%;left:40%;">
+                        <img src="../img/index.curved-bar-spinner.gif" width="64" height="64" />
+                    </div>
                 </div>
-              </div>
             </div>
           </div>
         </div>
