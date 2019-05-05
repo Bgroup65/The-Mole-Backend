@@ -38,12 +38,14 @@
             var pic = localStorage.getItem("AdminPic");
             $("#AdminPic").attr('src', pic);
 
+            $('#wait').show();
             //getting all users's
             ajaxCall("GET", "../api/Player", "", getSuccess, error);
         });
 
         function getSuccess(users) {
             try {
+                $('#wait').hide();
                 $('#users').DataTable({
                     data: users,
                     "order": [[4, "asc"]],
@@ -64,6 +66,7 @@
         }
 
         function error(er) {
+            $('#wait').hide();
             swal("", er, "warning");
         }
     </script>
@@ -73,26 +76,20 @@
 
     <!-- Page Wrapper -->
     <div id="wrapper">
-
         <!-- Content Wrapper -->
         <div id="content-wrapper" class="d-flex flex-column">
-
             <!-- Main Content -->
             <div id="content">
-
                 <!-- Topbar -->
                 <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
-
                     <!-- Sidebar Toggle (Topbar) -->
                     <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
                         <i class="fa fa-bars"></i>
                     </button>
-
                     <!-- Topbar Search -->
                     <form class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
                         <h1 class="h3 mb-0 text-gray-800">Users</h1>
                     </form>
-
                     <!-- Topbar Navbar -->
                     <ul class="navbar-nav ml-auto">
                         <!-- Nav Item - User Information -->
@@ -117,7 +114,7 @@
                     <!-- Table Row -->
                     <div>
                         <div class="table-responsive">
-                            <table id="users" class="table table-bordered"  style="width:100%" cellspacing="0">
+                            <table id="users" class="table table-bordered" style="width:100%" cellspacing="0">
                                 <thead>
                                     <tr>
                                         <th>NickName</th>
@@ -126,8 +123,11 @@
                                         <th>Gender</th>
                                         <th>Num of Wins</th>
                                     </tr>
-                                </thead>                                
+                                </thead>
                             </table>
+                            <div id="wait" style="display:none;width:69px;height:89px;position:absolute;top:50%;left:40%;">
+                                <img src="../img/index.curved-bar-spinner.gif" width="64" height="64" />
+                            </div>
                         </div>
 
                     </div>
@@ -176,7 +176,7 @@
             swal({
                 title: 'Select data to retrieve',
                 input: 'select',
-                inputOptions: { 'Users': 'Users', 'Games': 'Games', 'Vertecies in Games': 'Vertecies in Games' },
+                inputOptions: { 'Users': 'Users', 'Game Won': 'Game Won' },
                 inputPlaceholder: 'required',
                 showCancelButton: true,
                 inputValidator: function (value) {

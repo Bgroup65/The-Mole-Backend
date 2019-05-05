@@ -40,6 +40,8 @@
             var pic = localStorage.getItem("AdminPic");
             $("#AdminPic").attr('src', pic);
 
+            $('#wait').show();
+
             //getting all games
             ajaxCall("GET", "../api/Games", "", getSuccess, error);
         });
@@ -47,6 +49,7 @@
 
         function getSuccess(gamesdata) {
             try {
+                $('#wait').hide();
                 $('#games').DataTable({
                     data: gamesdata,
                     columns: [ //צריך להיות זהה לפרופרטיס שלי
@@ -66,6 +69,7 @@
         }
 
         function error(er) {
+            $('#wait').hide();
             swal("", er, "warning");
         }
     </script>
@@ -129,10 +133,10 @@
                                         <th>Game Dutarion</th>
                                     </tr>
                                 </thead>
-                                <tbody>
-                                    <!-- table body -->
-                                </tbody>
                             </table>
+                            <div id="wait" style="display:none;width:69px;height:89px;position:absolute;top:50%;left:40%;">
+                                <img src="../img/index.curved-bar-spinner.gif" width="64" height="64" />
+                            </div>
                         </div>
 
                     </div>

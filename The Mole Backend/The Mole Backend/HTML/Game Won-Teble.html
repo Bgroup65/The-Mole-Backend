@@ -9,7 +9,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>The Mole - Vertecies in Games</title>
+    <title>The Mole - Games Won</title>
 
     <!-- Custom fonts for this template-->
     <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -38,19 +38,25 @@
             var pic = localStorage.getItem("AdminPic");
             $("#AdminPic").attr('src', pic);
 
+            $('#wait').show();
+
+            //sapir changes to firebase
+
             //getting all games
             ajaxCall("GET", "../api/VerteciesIsInGame", "", getSuccess, error);
         });
 
         function getSuccess(vertecies) {
             try {
+                $('#wait').hide();
                 $('#vertecies').DataTable({
                     data: vertecies,
                     columns: [
-                        { data: "VerteciesId" },
-                        { data: "GameID" },
-                        { data: "VerteciesPosition" },
-                        { data: "PlayerId" },
+                        { data: "Category" },
+                        { data: "Player pic" },
+                        { data: "player name" },
+                        { data: "Num of vertecies" },
+                        { data: "Winnig path" },
                     ],
                 });
                 $("#vertecies_wrapper").removeClass();
@@ -62,6 +68,7 @@
         }
 
         function error(er) {
+            $('#wait').hide();
             swal("", er, "warning");
         }
     </script>
@@ -88,7 +95,7 @@
 
                     <!-- Topbar Search -->
                     <form class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
-                        <h1 class="h3 mb-0 text-gray-800">Vertecies in Games</h1>
+                        <h1 class="h3 mb-0 text-gray-800">Games Won</h1>
                     </form>
 
                     <!-- Topbar Navbar -->
@@ -115,16 +122,20 @@
                     <!-- Table Row -->
                     <div class="row">
                         <div class="table-responsive">
-                            <table id="vertecies" class="table table-bordered"  style="width:100%;" cellspacing="0">
+                            <table id="vertecies" class="table table-bordered" style="width:100%;" cellspacing="0">
                                 <thead>
                                     <tr>
-                                        <th>Vertecies Id</th>
-                                        <th>Game Id</th>
-                                        <th>Vertecies Position</th>
-                                        <th>Player Id</th>
+                                        <th>Category</th>
+                                        <th>Player pic</th>
+                                        <th>Player name</th>
+                                        <th>Num of vertecies</th>
+                                        <th>Winnig path</th>
                                     </tr>
-                                </thead>                                
+                                </thead>
                             </table>
+                            <div id="wait" style="display:none;width:69px;height:89px;position:absolute;top:50%;left:40%;">
+                                <img src="../img/index.curved-bar-spinner.gif" width="64" height="64" />
+                            </div>
                         </div>
 
                     </div>
@@ -173,7 +184,7 @@
             swal({
                 title: 'Select data to retrieve',
                 input: 'select',
-                inputOptions: { 'Users': 'Users', 'Games': 'Games', 'Vertecies in Games': 'Vertecies in Games' },
+                inputOptions: { 'Users': 'Users', 'Games Won': 'Games Won' },
                 inputPlaceholder: 'required',
                 showCancelButton: true,
                 inputValidator: function (value) {
