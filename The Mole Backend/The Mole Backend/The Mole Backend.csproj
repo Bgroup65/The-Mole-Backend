@@ -257,6 +257,7 @@
     <Content Include="HTML\templates\utilities-other.html" />
     <Content Include="HTML\Users-Teble.html" />
     <Content Include="HTML\Game Won-Teble.html" />
+    <Content Include="img\background img for login.png" />
     <Content Include="img\benny.gif" />
     <Content Include="img\index.curved-bar-spinner.gif" />
     <Content Include="img\lior.gif" />
