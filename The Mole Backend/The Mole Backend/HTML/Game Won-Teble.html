@@ -53,13 +53,18 @@
                 let ref = firebase.database().ref("/theMole" + categories[i]);
                 ref.on("child_added", function (snapshot) {
                     if (snapshot.val().state === 7 || snapshot.val().state === 6) {
-                        var path = {
+                        var d = '';
+                        if (snapshot.val().Date!== undefined) {
+                            d = snapshot.val().Date;
+                        }
+                        var path = {                         
+                            Date: d,
                             Category: snapshot.val().category,
                             'Player name': snapshot.val().state === 7 ? snapshot.val().joiner.displayName : snapshot.val().creator.displayName,
                             'Num of vertecies': snapshot.val().pathWon.length,
                             'Winnig path': snapshot.val().pathWon
                         }
-                        allPathsToVictory.push(path);
+                        allPathsToVictory.push(path);                        
                     }
                     
                 })
@@ -70,6 +75,7 @@
                 $('#vertecies').DataTable({
                     data: allPathsToVictory,
                     columns: [
+                        { data: "Date" },
                         { data: "Category" },
                         { data: "Player name" },
                         { data: "Num of vertecies" },
@@ -88,6 +94,7 @@
                 $('#vertecies').DataTable({
                     data: vertecies,
                     columns: [
+                        { data: "Date" },
                         { data: "Category" },
                         { data: "Player pic" },
                         { data: "player name" },
@@ -114,26 +121,20 @@
 
     <!-- Page Wrapper -->
     <div id="wrapper">
-
         <!-- Content Wrapper -->
         <div id="content-wrapper" class="d-flex flex-column">
-
             <!-- Main Content -->
             <div id="content">
-
                 <!-- Topbar -->
                 <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
-
                     <!-- Sidebar Toggle (Topbar) -->
                     <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
                         <i class="fa fa-bars"></i>
                     </button>
-
                     <!-- Topbar Search -->
                     <form class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
                         <h1 class="h3 mb-0 text-gray-800">Games Won</h1>
                     </form>
-
                     <!-- Topbar Navbar -->
                     <ul class="navbar-nav ml-auto">
                         <!-- Nav Item - User Information -->
@@ -144,7 +145,6 @@
                             </a>
                         </li>
                     </ul>
-
                 </nav>
                 <!-- End of Topbar -->
                 <!-- Begin Page Content -->
@@ -161,6 +161,7 @@
                             <table id="vertecies" class="table table-bordered" style="width:100%;" cellspacing="0">
                                 <thead>
                                     <tr>
+                                        <th>Date</th>
                                         <th>Category</th>
                                         <th>Player name</th>
                                         <th>Num of vertecies</th>

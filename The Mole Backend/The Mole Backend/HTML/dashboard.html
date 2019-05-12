@@ -27,6 +27,53 @@
     <script src="../Scripts/jquery-3.3.1.min.js"></script>
     <script src="../Scripts/ajaxCalls.js"></script>
 
+    <script src="https://www.gstatic.com/firebasejs/5.11.1/firebase.js"></script>
+
+    <script>
+        var FirebaseConfig = {
+            apiKey: "AIzaSyDTU4WcRf0sfYP77eeulY4BBtTcWG2tI68",
+            authDomain: "the-mole-230111.firebaseapp.com",
+            databaseURL: "https://the-mole-230111.firebaseio.com",
+            projectId: "the-mole-230111",
+            storageBucket: "the-mole-230111.appspot.com",
+            messagingSenderId: "625987979169"
+        }
+        firebase.initializeApp(FirebaseConfig);
+        var counter = 0;
+        $(document).ready(function () {
+
+            var categories = ["CELEBRITY", "FILMS", "GENERAL KNOWLEDGE", "MUSIC", "NBA", "POLITICS"];
+
+            for (var i = 0; i < categories.length; i++) {
+                let ref = firebase.database().ref("/theMole" + categories[i]);
+                ref.on("child_added", function (snapshot) {
+                    var d = '';
+                    if (snapshot.val().Date !== undefined) {
+                        d = snapshot.val().Date;
+                    }
+                    
+
+                    var today = new Date();
+                    var dd = String(today.getDate());
+                    var mm = String(today.getMonth() + 1); //January is 0!
+                    var yyyy = today.getFullYear();
+                    today = dd + '/' + mm + '/' + yyyy;
+
+                    var dt1 = new Date(d);
+                    var dt2 = new Date(today);
+                    var diffTime = Math.abs(dt2.getTime() - dt1.getTime());
+                    var diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+
+                    if (diffDays <= 30) {
+                       counter++;
+                    }
+                    $("#MonthGames").html(counter);
+                })
+            }
+        });
+    </script>
+
     <script>
         $(document).ready(function () {
             //getting all users who logged today
@@ -35,8 +82,8 @@
             //getting all users who created this month
             ajaxCall("GET", "../api/PlayerThismonth", "", getSuccess2, error2);
 
-            //getting all games who created this month
-            ajaxCall("GET", "../api/GamesThismonth", "", getSuccess3, error3);
+            ////getting all games who created this month
+            //ajaxCall("GET", "../api/GamesThismonth", "", getSuccess3, error3);
 
             //getting Admin's NickName & Pic
             var user = JSON.parse(localStorage.getItem("user"));
@@ -67,16 +114,16 @@
         }
 
 
-        function getSuccess3(num) {
-            try {
-                $("#MonthGames").html(num);
-            } catch (er) {
-                swal("", er, "warning");
-            }
-        }
-        function error3(error) {
-            console.log(error);
-        }
+        //function getSuccess3(num) {
+        //    try {
+        //        $("#MonthGames").html(num);
+        //    } catch (er) {
+        //        swal("", er, "warning");
+        //    }
+        //}
+        //function error3(error) {
+        //    console.log(error);
+        //}
 
         function getSuccessAdmin(admin) {
             try {
@@ -91,6 +138,9 @@
             console.log(error);
         }
     </script>
+
+
+
 
 </head>
 
@@ -142,7 +192,7 @@
                     </div>
 
                     <!-- Content Row -->
-                    <div class="row align-items-center justify-content-center">
+                    <div class="row align-items-center justify-content-center" style="height:400px">
 
                         <!-- Players online (Dayly) -->
                         <div class="col-xl-3 col-md-6 mb-4">
