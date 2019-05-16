@@ -30,6 +30,7 @@
     <script src="https://www.gstatic.com/firebasejs/5.11.1/firebase.js"></script>
 
     <script>
+        
         var FirebaseConfig = {
             apiKey: "AIzaSyDTU4WcRf0sfYP77eeulY4BBtTcWG2tI68",
             authDomain: "the-mole-230111.firebaseapp.com",
@@ -39,38 +40,39 @@
             messagingSenderId: "625987979169"
         }
         firebase.initializeApp(FirebaseConfig);
-        var counter = 0;
-        $(document).ready(function () {
 
+        var counter = 0;
+
+        //getting all games who created this month from Firebase
+        $(document).ready(function () {
             var categories = ["CELEBRITY", "FILMS", "GENERAL KNOWLEDGE", "MUSIC", "NBA", "POLITICS"];
 
             for (var i = 0; i < categories.length; i++) {
                 let ref = firebase.database().ref("/theMole" + categories[i]);
                 ref.on("child_added", function (snapshot) {
-                    var d = '';
+
+                    var d = '';                    
                     if (snapshot.val().Date !== undefined) {
                         d = snapshot.val().Date;
+                        var datearray = d.split("/");
+                        var newd = datearray[1] + '/' + datearray[0] + '/' + datearray[2];
+
+                        var today = new Date();
+                        
+                        var d2 = Date.parse(newd);
+                        var d3 = new Date(d2);
+
+                        var diffTime = Math.abs(today.getTime() - d3.getTime());
+                        var diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+
+                        if (diffDays <= 30) {
+                            counter++;
+                        }
                     }
-                    
 
-                    var today = new Date();
-                    var dd = String(today.getDate());
-                    var mm = String(today.getMonth() + 1); //January is 0!
-                    var yyyy = today.getFullYear();
-                    today = dd + '/' + mm + '/' + yyyy;
-
-                    var dt1 = new Date(d);
-                    var dt2 = new Date(today);
-                    var diffTime = Math.abs(dt2.getTime() - dt1.getTime());
-                    var diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-
-
-                    if (diffDays <= 30) {
-                       counter++;
-                    }
                     $("#MonthGames").html(counter);
                 })
-            }
+            }            
         });
     </script>
 
@@ -82,12 +84,12 @@
             //getting all users who created this month
             ajaxCall("GET", "../api/PlayerThismonth", "", getSuccess2, error2);
 
-            ////getting all games who created this month
-            //ajaxCall("GET", "../api/GamesThismonth", "", getSuccess3, error3);
-
             //getting Admin's NickName & Pic
             var user = JSON.parse(localStorage.getItem("user"));
-            ajaxCall("GET", "../api/Admin/?Email=" + user.Email, "", getSuccessAdmin, errorAdmin);
+            ajaxCall("GET", "../api/Admin/?Email=" + user.Email, "", getSuccessAdmin, errorAdmin);      
+
+            //getting Player Of the Game
+            ajaxCall("GET", "../api/PlayerOfTheGame", "", getSuccess3, error3);
         });
 
         function getSuccess1(num) {
@@ -113,18 +115,6 @@
             console.log(error);
         }
 
-
-        //function getSuccess3(num) {
-        //    try {
-        //        $("#MonthGames").html(num);
-        //    } catch (er) {
-        //        swal("", er, "warning");
-        //    }
-        //}
-        //function error3(error) {
-        //    console.log(error);
-        //}
-
         function getSuccessAdmin(admin) {
             try {
                 $("#AdminName").html(admin.NickName);
@@ -137,6 +127,20 @@
         function errorAdmin(error) {
             console.log(error);
         }
+
+        function getSuccess3(player) {
+            try {
+                $("#nickName").html(player.NickName);
+                $("#profilepic").attr('src', player.ProfilePic);
+                $("#numofWins").html(player.NumOfWinnings);
+            } catch (e) {
+                console.log(e);
+            }
+        }
+        function error3(error) {
+            console.log(error);
+        }
+
     </script>
 
 
@@ -192,7 +196,7 @@
                     </div>
 
                     <!-- Content Row -->
-                    <div class="row align-items-center justify-content-center" style="height:400px">
+                    <div class="row align-items-center justify-content-center">
 
                         <!-- Players online (Dayly) -->
                         <div class="col-xl-3 col-md-6 mb-4">
@@ -251,8 +255,33 @@
 
                     <!-- Content Row -->
 
-                    <div class="row">
+                    <div class="row align-items-center justify-content-center">
 
+                        <!-- Player of the game -->
+                        <div class="card shadow mb-4">
+                            <div class="card-header py-3">
+                                <h6 class="m-0 font-weight-bold text-primary">Player of the game</h6>
+                            </div>
+                            <div class="card-body">
+                                <h6 id="nickName"></h6>
+                                <img id="profilepic" style="height:150px">
+                                <h6 id="numofWins"></h6><h6>Wins</h6>
+                            </div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-comments fa-2x text-gray-300"></i>
+                        </div>
+                        <!-- Category of the game -->
+                        <div class="card shadow mb-4">
+                            <div class="card-header py-3">
+                                <h6 class="m-0 font-weight-bold text-primary">Category of the game</h6>
+                            </div>
+                            <div class="card-body">
+                                <h6 id="CategoryName"></h6>
+                                <img id="CategoryPic" style="height:150px">
+                                <h6 id="Numofchoose"></h6><h6>times</h6>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <!-- /.container-fluid -->

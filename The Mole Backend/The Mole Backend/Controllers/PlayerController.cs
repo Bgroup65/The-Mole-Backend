@@ -28,6 +28,7 @@ namespace AdminPage.Controllers
                 throw new Exception("GET ALL players error: ",ex);
             }
         }
+
         [HttpGet]
         [Route("api/PlayerGetToken")]
         public string GetToken(string uid)
@@ -53,7 +54,7 @@ namespace AdminPage.Controllers
                 p.Insert();
             }
 
-            catch (Exception ex)
+            catch (Exception )
             {
                 throw new Exception("בעיה בהכנסת הנתונים למערכת");
             }
@@ -70,7 +71,7 @@ namespace AdminPage.Controllers
                 p.InsertToken(p.Token, p.Uid);
             }
 
-            catch (Exception ex)
+            catch (Exception)
             {
                 throw new Exception("Post ");
             }
@@ -103,7 +104,7 @@ namespace AdminPage.Controllers
                 p.InsertLastLogin(p.Uid);
             }
 
-            catch (Exception ex)
+            catch (Exception)
             {
                 throw new Exception("בעיה בהכנסת הנתונים למערכת");
             }
@@ -144,6 +145,26 @@ namespace AdminPage.Controllers
                 throw new Exception("GET Players error: ", ex);
             }
         }
+
+        // GET: api/PlayerOfTheGame
+        [HttpGet]
+        [Route("api/PlayerOfTheGame")]
+        public Player PlayerOfTheGame()
+        {
+            try
+            {
+                Player p = new Player();
+                return p.PlayerOfTheGame();
+            }
+            catch (Exception ex)
+            {
+
+                throw new Exception("GET player error: ", ex);
+            }
+        }
+
+
+
 
 
 

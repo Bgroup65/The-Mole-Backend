@@ -61,14 +61,5 @@ namespace AdminPage.Models
             return lg;
 
         }
-
-        //Count how many games created in this month
-        public int MonthGames()
-        {
-            DBservices dbs = new DBservices();
-            List<Game> lg = dbs.MonthGames("TheMoleConnection", "Game");
-            int numofPlayers = lg.Count();
-            return numofPlayers;
-        }
     }
 }

@@ -1,5 +1,5 @@
 ﻿function ajaxCall(method, api, data, successCB, errorCB) {
-    $.ajax({
+$.ajax({
         type: method,
         url: api,
         data: data,

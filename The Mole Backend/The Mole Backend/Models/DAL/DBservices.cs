@@ -415,7 +415,7 @@ public class DBservices
                 p.NickName = dr["UserNickname"].ToString();
                 p.Email = dr["UserEmail"].ToString();
                 p.BirthDate = dr["birthDate"].ToString();
-                p.Gender = dr["gender"].ToString();
+                p.Gender = dr["gender"].ToString();                
                 if (dr["numOfWinnings"].ToString() == "")
                 {
                     p.NumOfWinnings = 0;
@@ -563,6 +563,7 @@ public class DBservices
             }
         }
     }
+
     //---------------------------------------------------------------------------------
     // Read Players WHO SIGNED UP TODAY from the DB into a list - dataReader with Filter
     //---------------------------------------------------------------------------------
@@ -654,49 +655,6 @@ public class DBservices
     }
 
     //---------------------------------------------------------------------------------
-    // Read Games WHO Created This MONTH from the DB into a list - dataReader with Filter
-    //---------------------------------------------------------------------------------
-    public List<Game> MonthGames(string conString, string tableName)
-    {
-
-        SqlConnection con = null;
-        List<Game> lg = new List<Game>();
-        try
-        {
-            con = connect(conString); // create a connection to the database using the connection String defined in the web config file
-
-            String selectSTR = "SELECT DISTINCT * FROM " + tableName + "  WHERE datediff(DAY,GameDate,getdate())<=30";
-            SqlCommand cmd = new SqlCommand(selectSTR, con);
-
-            // get a reader
-            SqlDataReader dr = cmd.ExecuteReader(CommandBehavior.CloseConnection); // CommandBehavior.CloseConnection: the connection will be closed after reading has reached the end
-
-            while (dr.Read())
-            {   // Read till the end of the data into a row
-                Game g = new Game();
-                g.Id = Convert.ToInt32(dr["GameID"]);
-                g.GameDate = dr["GameDate"].ToString();
-
-                lg.Add(g);
-            }
-
-            return lg;
-        }
-        catch (Exception ex)
-        {
-            // write to log
-            throw (ex);
-        }
-        finally
-        {
-            if (con != null)
-            {
-                con.Close();
-            }
-        }
-    }
-
-    //---------------------------------------------------------------------------------
     //getting Admin's NickName & Pic
     //---------------------------------------------------------------------------------
     public Admin GetAdmin(string conString, string tableName, string email)
@@ -738,5 +696,46 @@ public class DBservices
         }
     }
 
+    //---------------------------------------------------------------------------------
+    // Read Players with highest num of wins from the DB into a list - dataReader with Filter
+    //---------------------------------------------------------------------------------
+
+    public Player PlayerOfTheGame(string conString, string tableName)
+    {
+
+        SqlConnection con = null;
+        Player p = new Player();
+        try
+        {
+            con = connect(conString); // create a connection to the database using the connection String defined in the web config file
+
+            String selectSTR = "SELECT * FROM " + tableName + "  WHERE numOfWinnings = (Select Max(numOfWinnings) From Player)";
+            SqlCommand cmd = new SqlCommand(selectSTR, con);
+
+            // get a reader
+            SqlDataReader dr = cmd.ExecuteReader(CommandBehavior.CloseConnection); // CommandBehavior.CloseConnection: the connection will be closed after reading has reached the end
+
+            while (dr.Read())
+            {   // Read till the end of the data into a row
+                p.NickName = dr["UserNickname"].ToString();
+                p.NumOfWinnings = (Int32)dr["numOfWinnings"];
+                p.ProfilePic = dr["profile_pic"].ToString();
+            }
+
+            return p;
+        }
+        catch (Exception ex)
+        {
+            // write to log
+            throw (ex);
+        }
+        finally
+        {
+            if (con != null)
+            {
+                con.Close();
+            }
+        }
+    }
 
 }

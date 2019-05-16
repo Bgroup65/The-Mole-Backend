@@ -156,5 +156,13 @@ namespace AdminPage.Models
             int numofPlayers = lp.Count();
             return numofPlayers;
         }
+
+        //Read Player og the game
+        public Player PlayerOfTheGame()
+        {
+            DBservices dbs = new DBservices();
+            Player p = dbs.PlayerOfTheGame("TheMoleConnection", "Player");           
+            return p;
+        }
     }
 }
