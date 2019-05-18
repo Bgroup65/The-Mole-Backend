@@ -30,7 +30,7 @@
     <script src="https://www.gstatic.com/firebasejs/5.11.1/firebase.js"></script>
 
     <script>
-        
+        $('#wait').show();
         var FirebaseConfig = {
             apiKey: "AIzaSyDTU4WcRf0sfYP77eeulY4BBtTcWG2tI68",
             authDomain: "the-mole-230111.firebaseapp.com",
@@ -42,11 +42,16 @@
         firebase.initializeApp(FirebaseConfig);
 
         var counter = 0;
+        var celebcounter = 0;
+        var nbacounter = 0;
+        var filmcounter = 0;
+        var gkcounter = 0;
+        var musicounter = 0;
+        var policounter = 0;
 
-        //getting all games who created this month from Firebase
+        //getting all games who created this month from Firebase and highest category
         $(document).ready(function () {
             var categories = ["CELEBRITY", "FILMS", "GENERAL KNOWLEDGE", "MUSIC", "NBA", "POLITICS"];
-
             for (var i = 0; i < categories.length; i++) {
                 let ref = firebase.database().ref("/theMole" + categories[i]);
                 ref.on("child_added", function (snapshot) {
@@ -58,7 +63,7 @@
                         var newd = datearray[1] + '/' + datearray[0] + '/' + datearray[2];
 
                         var today = new Date();
-                        
+
                         var d2 = Date.parse(newd);
                         var d3 = new Date(d2);
 
@@ -68,11 +73,157 @@
                         if (diffDays <= 30) {
                             counter++;
                         }
+
+                        var category = snapshot.val().category
+                        switch (category) {
+                            case "CELEBRITY": celebcounter++;
+                                break;
+                            case "FILMS": filmcounter++;
+                                break;
+                            case "GENERAL KNOWLEDGE": gkcounter++;
+                                break;
+                            case "MUSIC": musicounter++;
+                                break;
+                            case "NBA": nbacounter++;
+                                break;
+                            case "POLITICS": policounter++;
+                                break;
+                        }
                     }
                     
                     $("#MonthGames").html(counter);
+                    $('#wait').hide();
+
+                    var myCanvas = document.getElementById("myCanvas");
+                    myCanvas.width = 225;
+                    myCanvas.height = 225;
+
+                    var ctx = myCanvas.getContext("2d");
+                    function drawLine(ctx, startX, startY, endX, endY) {
+                        ctx.beginPath();
+                        ctx.moveTo(startX, startY);
+                        ctx.lineTo(endX, endY);
+                        ctx.stroke();
+                    }
+                    function drawArc(ctx, centerX, centerY, radius, startAngle, endAngle) {
+                        ctx.beginPath();
+                        ctx.arc(centerX, centerY, radius, startAngle, endAngle);
+                        ctx.stroke();
+                    }
+                    function drawPieSlice(ctx, centerX, centerY, radius, startAngle, endAngle, color) {
+                        ctx.fillStyle = color;
+                        ctx.beginPath();
+                        ctx.moveTo(centerX, centerY);
+                        ctx.arc(centerX, centerY, radius, startAngle, endAngle);
+                        ctx.closePath();
+                        ctx.fill();
+                    }
+
+                    var myVinyls = {
+                        "Celebrity": celebcounter,
+                        "Movies": filmcounter,
+                        "General Knowledge": gkcounter,
+                        "Music": musicounter,
+                        "NBA": nbacounter,
+                        "Politics": policounter
+                    };
+
+                    var Piechart = function (options) {
+                        this.options = options;
+                        this.canvas = options.canvas;
+                        this.ctx = this.canvas.getContext("2d");
+                        this.colors = options.colors;
+
+                        this.draw = function () {
+                            var total_value = 0;
+                            var color_index = 0;
+                            for (var categ in this.options.data) {
+                                var val = this.options.data[categ];
+                                total_value += val;
+                            }
+
+                            var start_angle = 0;
+                            for (categ in this.options.data) {
+                                val = this.options.data[categ];
+                                var slice_angle = 2 * Math.PI * val / total_value;
+
+                                drawPieSlice(
+                                    this.ctx,
+                                    this.canvas.width / 2,
+                                    this.canvas.height / 2,
+                                    Math.min(this.canvas.width / 2, this.canvas.height / 2),
+                                    start_angle,
+                                    start_angle + slice_angle,
+                                    this.colors[color_index % this.colors.length]
+                                );
+
+                                start_angle += slice_angle;
+                                color_index++;
+                            }
+
+                            //drawing a white circle over the chart
+                            //to create the doughnut chart
+                            if (this.options.doughnutHoleSize) {
+                                drawPieSlice(
+                                    this.ctx,
+                                    this.canvas.width / 2,
+                                    this.canvas.height / 2,
+                                    this.options.doughnutHoleSize * Math.min(this.canvas.width / 2, this.canvas.height / 2),
+                                    0,
+                                    2 * Math.PI,
+                                    "#ffffff"
+                                );
+                            }
+
+                            start_angle = 0;
+                            for (categ in this.options.data) {
+                                val = this.options.data[categ];
+                                slice_angle = 2 * Math.PI * val / total_value;
+                                var pieRadius = Math.min(this.canvas.width / 2, this.canvas.height / 2);
+                                var labelX = this.canvas.width / 2 + (pieRadius / 2) * Math.cos(start_angle + slice_angle / 2);
+                                var labelY = this.canvas.height / 2 + (pieRadius / 2) * Math.sin(start_angle + slice_angle / 2);
+
+                                if (this.options.doughnutHoleSize) {
+                                    var offset = (pieRadius * this.options.doughnutHoleSize) / 2;
+                                    labelX = this.canvas.width / 2 + (offset + pieRadius / 2) * Math.cos(start_angle + slice_angle / 2);
+                                    labelY = this.canvas.height / 2 + (offset + pieRadius / 2) * Math.sin(start_angle + slice_angle / 2);
+                                }
+
+                                var labelText = Math.round(100 * val / total_value);
+                                this.ctx.fillStyle = "#858796";
+                                this.ctx.font = "bold 15px Arial";
+                                this.ctx.fillText(labelText + "%", labelX, labelY);
+                                start_angle += slice_angle;
+                            }
+
+                            if (this.options.legend) {
+                                color_index = 0;
+                                var legendHTML = "";
+                                for (categ in this.options.data) {
+                                    legendHTML += "<span class='mr - 2'><i style='display:inline-block;width:20px;background-color:" + this.colors[color_index++] + ";'>&nbsp;</i> " + categ + "</span>";
+                                }
+                                this.options.legend.innerHTML = legendHTML;
+                            }
+                        }
+                    }
+
+                    var myLegend = document.getElementById("myLegend");
+
+                    var myDougnutChart = new Piechart(
+                        {
+                            canvas: myCanvas,
+                            data: myVinyls,
+                            colors: ["#CC9A8F", "#CDDCAC", "#FDE5CC", "#E9C6AB", "#FFE6B2", "#A2C7A7"],
+                            doughnutHoleSize: 0.5,
+                            legend: myLegend
+                        }
+                    );
+                    myDougnutChart.draw();
+
+
                 })
-            }            
+            }
+
         });
     </script>
 
@@ -86,7 +237,7 @@
 
             //getting Admin's NickName & Pic
             var user = JSON.parse(localStorage.getItem("user"));
-            ajaxCall("GET", "../api/Admin/?Email=" + user.Email, "", getSuccessAdmin, errorAdmin);      
+            ajaxCall("GET", "../api/Admin/?Email=" + user.Email, "", getSuccessAdmin, errorAdmin);
 
             //getting Player Of the Game
             ajaxCall("GET", "../api/PlayerOfTheGame", "", getSuccess3, error3);
@@ -255,6 +406,10 @@
 
                     <!-- Content Row -->
 
+                    <div id="wait" style="display:none;width:69px;height:89px;position:absolute;top:50%;left:40%;">
+                        <img src="../img/index.curved-bar-spinner.gif" width="64" height="64" />
+                    </div>
+
                     <div class="row align-items-center justify-content-center">
 
                         <!-- Player of the game -->
@@ -274,12 +429,14 @@
                         <!-- Category of the game -->
                         <div class="card shadow mb-4">
                             <div class="card-header py-3">
-                                <h6 class="m-0 font-weight-bold text-primary">Category of the game</h6>
+                                <h6 class="m-0 font-weight-bold text-primary">Category Pie Chart</h6>
                             </div>
                             <div class="card-body">
-                                <h6 id="CategoryName"></h6>
-                                <img id="CategoryPic" style="height:150px">
-                                <h6 id="Numofchoose"></h6><h6>times</h6>
+                                <canvas id="myCanvas" style="margin-left:100px"></canvas>
+                                <div class="mt-4 text-center small">
+                                    <div id="myLegend">
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
