@@ -51,7 +51,7 @@
                 let ref = firebase.database().ref("/theMole" + categories[i]);
                 ref.on("child_added", function (snapshot) {
 
-                    var d = '';                    
+                    var d = '';
                     if (snapshot.val().Date !== undefined) {
                         d = snapshot.val().Date;
                         var datearray = d.split("/");
@@ -69,7 +69,7 @@
                             counter++;
                         }
                     }
-
+                    
                     $("#MonthGames").html(counter);
                 })
             }            
@@ -188,7 +188,7 @@
                 </nav>
                 <!-- End of Topbar -->
                 <!-- Begin Page Content -->
-                <div class="container-fluid">
+                <div class="container-fluid" style="background-image: url(https://securestrux.com/content/uploads/2014/02/network_blue_opacity_lighter.png)">
 
                     <!-- Page Heading -->
                     <div class="d-sm-flex align-items-center justify-content-between mb-4">

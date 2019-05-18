@@ -259,10 +259,16 @@
     <Content Include="HTML\Game Won-Teble.html" />
     <Content Include="img\background img for login.png" />
     <Content Include="img\benny.gif" />
+    <Content Include="img\celeb-02.png" />
+    <Content Include="img\GK-02.png" />
     <Content Include="img\index.curved-bar-spinner.gif" />
     <Content Include="img\lior.gif" />
     <Content Include="img\logo33-03.jpg" />
     <Content Include="img\mor.gif" />
+    <Content Include="img\movies-02.png" />
+    <Content Include="img\Music-02.png" />
+    <Content Include="img\NBA-02.png" />
+    <Content Include="img\politic-02.png" />
     <Content Include="img\sapir.gif" />
     <Content Include="img\TheMoleLogo.JPG" />
     <Content Include="img\undraw_posting_photo.svg" />
