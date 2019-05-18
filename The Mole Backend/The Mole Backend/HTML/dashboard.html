@@ -200,7 +200,7 @@
                                 color_index = 0;
                                 var legendHTML = "";
                                 for (categ in this.options.data) {
-                                    legendHTML += "<span class='mr - 2'><i style='display:inline-block;width:20px;background-color:" + this.colors[color_index++] + ";'>&nbsp;</i> " + categ + "</span>";
+                                    legendHTML += "<span style='margin-left:10px'><i style='display:inline-block;width:20px;background-color:" + this.colors[color_index++] + ";'>&nbsp;</i> " + categ + "</span>";
                                 }
                                 this.options.legend.innerHTML = legendHTML;
                             }
@@ -413,14 +413,14 @@
                     <div class="row align-items-center justify-content-center">
 
                         <!-- Player of the game -->
-                        <div class="card shadow mb-4">
+                        <div class="card shadow mb-4" style="height:364px">
                             <div class="card-header py-3">
                                 <h6 class="m-0 font-weight-bold text-primary">Player of the game</h6>
                             </div>
                             <div class="card-body">
                                 <h6 id="nickName"></h6>
                                 <img id="profilepic" style="height:150px">
-                                <h6 id="numofWins"></h6><h6>Wins</h6>
+                                <h6 id="numofWins" style="font-size:25px"></h6><h6>Wins</h6>
                             </div>
                         </div>
                         <div class="col-auto">
@@ -432,7 +432,7 @@
                                 <h6 class="m-0 font-weight-bold text-primary">Categories Pie Chart</h6>
                             </div>
                             <div class="card-body">
-                                <canvas id="myCanvas" style="margin-left:100px"></canvas>
+                                <canvas id="myCanvas" style="margin-left:130px"></canvas>
                                 <div class="mt-4 text-center small">
                                     <div id="myLegend">
                                     </div>
