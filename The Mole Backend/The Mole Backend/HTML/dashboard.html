@@ -190,9 +190,10 @@
                                 }
 
                                 var labelText = Math.round(100 * val / total_value);
-                                this.ctx.fillStyle = "#858796";
-                                this.ctx.font = "bold 15px Arial";
+                                this.ctx.fillStyle = "#5a5c69";
+                                this.ctx.font = "bold 15px Nunito";
                                 this.ctx.fillText(labelText + "%", labelX, labelY);
+                                this.ctx.textAlign = "center";
                                 start_angle += slice_angle;
                             }
 
@@ -432,7 +433,7 @@
                                 <h6 class="m-0 font-weight-bold text-primary">Categories Pie Chart</h6>
                             </div>
                             <div class="card-body">
-                                <canvas id="myCanvas" style="margin-left:130px"></canvas>
+                                <canvas id="myCanvas" style="margin-left:140px"></canvas>
                                 <div class="mt-4 text-center small">
                                     <div id="myLegend">
                                     </div>
