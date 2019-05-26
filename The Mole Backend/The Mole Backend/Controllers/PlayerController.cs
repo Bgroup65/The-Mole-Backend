@@ -25,10 +25,9 @@ namespace AdminPage.Controllers
             catch (Exception ex)
             {
 
-                throw new Exception("GET ALL players error: ",ex);
+                throw new Exception("GET ALL players error: "+ex.Message);
             }
         }
-
         [HttpGet]
         [Route("api/PlayerGetToken")]
         public string GetToken(string uid)
@@ -41,7 +40,7 @@ namespace AdminPage.Controllers
             catch (Exception ex)
             {
 
-                throw new Exception("GetToken error: ",ex);
+                throw new Exception("GetToken error: "+ex.Message);
             }
         }
         //insert new player
@@ -54,9 +53,9 @@ namespace AdminPage.Controllers
                 p.Insert();
             }
 
-            catch (Exception )
+            catch (Exception ex)
             {
-                throw new Exception("בעיה בהכנסת הנתונים למערכת");
+                throw new Exception("Post new player ERROR: "+ex.Message);
             }
         }
 
@@ -71,16 +70,47 @@ namespace AdminPage.Controllers
                 p.InsertToken(p.Token, p.Uid);
             }
 
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw new Exception("Post ");
+                throw new Exception("Post playerToken ERROR: "+ex.Message);
             }
         }
 
+        //insert win/lose
+        [HttpPost]
+        [Route("api/playerWinOrLose")]
+        public void PostWinOrLoseForPlayer(int win, int cashMole, string uid)
+        {
+            try
+            {
+                Player p = new Player();
+                p.SetCashAndWin(win, cashMole, uid);
+            }
+
+            catch (Exception ex)
+            {
+                throw new Exception("Post playerWinOrLose "+ex.Message);
+            }
+        }
+        [HttpGet]
+        [Route("api/playerGetPlayer")]
+        public Player GetPlayer(string uid)
+        {
+            try
+            {
+                Player p = new Player();
+                return p.getPlayer(uid);
+            }
+
+            catch (Exception ex)
+            {
+                throw new Exception("GET PLAYER ERROR "+ex.Message);
+            }
+        }
         //insert avatar player
         [HttpPost]
         [Route("api/playerAvatar")]
-        public void PostAvatar(string avatarUrl, string uid)
+        public void PostAvatar(string avatarUrl,string uid)
         {
             try
             {
@@ -88,7 +118,7 @@ namespace AdminPage.Controllers
                 p.InsertAvatar(avatarUrl, uid);
             }
 
-            catch (Exception)
+            catch (Exception ex)
             {
                 throw new Exception("בעיה בהכנסת הנתונים למערכת");
             }
@@ -104,9 +134,9 @@ namespace AdminPage.Controllers
                 p.InsertLastLogin(p.Uid);
             }
 
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw new Exception("בעיה בהכנסת הנתונים למערכת");
+                throw new Exception("PostLastLogin ERROR: " +ex.Message);
             }
         }
 
@@ -124,7 +154,7 @@ namespace AdminPage.Controllers
             catch (Exception ex)
             {
 
-                throw new Exception("GET Todays players error: ", ex);
+                throw new Exception("GET PlayerToday error: " + ex.Message);
             }
         }
 
@@ -142,7 +172,26 @@ namespace AdminPage.Controllers
             catch (Exception ex)
             {
 
-                throw new Exception("GET Players error: ", ex);
+                throw new Exception("GetMonthPlayers error: "+ ex.Message);
+            }
+        }
+
+        // GET: api
+        [HttpGet]
+        [Route("api/PlayerWinners")]
+        public IEnumerable<Player> GetWinners()
+        {
+            try
+            {
+                List<Player> playerList = new List<Player>();
+                Player p = new Player();
+                playerList = p.ReadWinners();
+                return playerList;
+            }
+            catch (Exception ex)
+            {
+
+                throw new Exception("בעיה בקריאת נתוני הנצחונות מהמערכת");
             }
         }
 
@@ -162,11 +211,6 @@ namespace AdminPage.Controllers
                 throw new Exception("GET player error: ", ex);
             }
         }
-
-
-
-
-
 
         // GET: api/Player/5
         public string Get(int id)

@@ -75,6 +75,7 @@
                 $('#wait').hide();
                 $('#vertecies').DataTable({
                     data: allPathsToVictory,
+                    "order": [[0, "desc"]],
                     columns: [
                         { data: "Date" },
                         { data: "Category" },

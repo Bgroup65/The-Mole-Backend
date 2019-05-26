@@ -55,6 +55,6 @@ namespace AdminPage.Models
             Admin a = new Admin();
             a = db.GetAdmin("TheMoleConnection", "Admin", email);
             return a;
-        }       
+        }
     }
 }

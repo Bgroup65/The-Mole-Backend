@@ -25,12 +25,6 @@ namespace AdminPage.Models
             set { verteciesPosition = value; }
         }
 
-        int playerId;
-        public int PlayerId {
-            get { return playerId; }
-            set { playerId = value; }
-        }
-
         public VerteciesIsInGame()
         {
 

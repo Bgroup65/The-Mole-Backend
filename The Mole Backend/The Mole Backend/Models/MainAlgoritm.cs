@@ -12,7 +12,9 @@ namespace The_Mole_Backend.Models
         public string Source { get; set; }
         public string Source2 { get; set; }
         public string Target { get; set; }
+        
         static Random random = new Random();
+
         
         public MainAlgorithm(string source, string target)
         {
@@ -162,6 +164,9 @@ namespace The_Mole_Backend.Models
         /// <returns></returns>
         public List<List<string>> GetPath(string source, string target,string categoryName)
         {
+            //get all vertecies and edges from db
+            DBservices db = new DBservices();
+
             List<List<string>> TwoPaths = new List<List<string>>();
             string edgeCategoryName = "";
             string verteciesCategoryName = "";
@@ -171,11 +176,11 @@ namespace The_Mole_Backend.Models
                     edgeCategoryName = "NBAEdges";
                     verteciesCategoryName = "NBAVertecies";
                     break;
-                case "GENERALKNOWLEDGE":
+                case "GENERAL KNOWLEDGE":
                     edgeCategoryName = "GeneralEdges";
                     verteciesCategoryName = "GeneralVertecies";
                     break;
-                case "MOVIES":
+                case "FILMS":
                     edgeCategoryName = "MoviesEdges";
                     verteciesCategoryName = "MoviesVertecies";
                     break;
@@ -183,19 +188,34 @@ namespace The_Mole_Backend.Models
                     edgeCategoryName = "MusicEdges";
                     verteciesCategoryName = "MusicVertecies";
                     break;
-                case "CELEB":
+                case "CELEBRITY":
                     edgeCategoryName = "CelebEdges";
                     verteciesCategoryName = "CelebVertecies";
                     break;
+                case "POLITICS":
+                    edgeCategoryName = "PoliticiansEdges";
+                    verteciesCategoryName = "PoliticiansVertecies";
+                    break;
+
                 default:
                     break;
             }
             List<string> path = new List<string>();
-            //get all vertecies and edges from db
-            DBservices db = new DBservices();
+
+
             //get edges and vertecies for the given category
-            List<string> vertecies = this.GetVerteciesForCategory("TheMoleConnection", verteciesCategoryName);
-            List<List<string>> edges = this.GetEdgesForCategory("TheMoleConnection", edgeCategoryName);
+            List<string> vertecies = new List<string>();
+            List<List<string>> edges = new List<List<string>>();
+            if (HttpContext.Current.Application[verteciesCategoryName] != null)
+            {
+                vertecies = HttpContext.Current.Application[verteciesCategoryName] as List<string>;
+            }
+            else vertecies = db.GetAllVertecies("TheMoleConnection", verteciesCategoryName);
+            if (HttpContext.Current.Application[edgeCategoryName] != null)
+            {
+                edges = HttpContext.Current.Application[edgeCategoryName] as List<List<string>>;
+            }
+            else edges = db.GetEdges( "TheMoleConnection", edgeCategoryName);
             //create a graph 
             var graph = new WeightedDiGraph<string, int>();
             //insert vertecies to the graph
@@ -212,17 +232,27 @@ namespace The_Mole_Backend.Models
             var algorithm = new DijikstraShortestPath<string, int>(new DijikstraShortestPathOperators());
 
             List<string> pathsTwo = new List<string>();
-            var result = algorithm.FindShortestPath(graph,source,target);
-            if (result.Path.Count == 1)
+            try
             {
-                pathsTwo.Add(source);
-                pathsTwo.Add(target);
-                TwoPaths.Add(pathsTwo);
+                var result = algorithm.FindShortestPath(graph, source, target);
+                if (result.Path.Count == 1)
+                {
+                    pathsTwo.Add(source);
+                    pathsTwo.Add(target);
+                    TwoPaths.Add(pathsTwo);
+                }
+
+                else TwoPaths.Add(result.Path);
+                TwoPaths.Add(getThreeMoreRandom(source, categoryName));
             }
+            catch (Exception ex)
+            {
 
-            else TwoPaths.Add(result.Path);
-
+               // TwoPaths.Add(getThreeMoreRandom(source, categoryName));
+                return TwoPaths;
+            }
             return TwoPaths;
+
         }
 
         /// <summary>
@@ -239,25 +269,36 @@ namespace The_Mole_Backend.Models
                 case "NBA":
                     verteciesCategoryName = "NBAVertecies";
                     break;
-                case "GENERALKNOWLEDGE":
+                case "GENERAL KNOWLEDGE":
                     verteciesCategoryName = "GeneralVertecies";
                     break;
-                case "MOVIES":
+                case "FILMS":
                     verteciesCategoryName = "MoviesVertecies";
                     break;
                 case "MUSIC":
                     verteciesCategoryName = "MusicVertecies";
                     break;
-                case "CELEB":
+                case "CELEBRITY":
                     verteciesCategoryName = "CelebVertecies";
                     break;
+                case "POLITICS":
+                    verteciesCategoryName = "PoliticiansVertecies";
+                    break;
+
                 default:
                     break;
             }
             //get all vertecies and edges from db
             DBservices db = new DBservices();
             //get vertecies for the given category
-            List<string> vertecies = this.GetVerteciesForCategory("TheMoleConnection", verteciesCategoryName);
+            //get edges and vertecies for the given category
+            List<string> vertecies = new List<string>();
+            if (HttpContext.Current.Application[verteciesCategoryName] != null)
+            {
+                vertecies = HttpContext.Current.Application[verteciesCategoryName] as List<string>;
+            }
+            else vertecies = db.GetAllVertecies("TheMoleConnection", verteciesCategoryName);
+            
             //get six  random articles from vertecies list in a category
             for (int i = 0; i < 6; i++)
             {
@@ -312,11 +353,11 @@ namespace The_Mole_Backend.Models
                     edgeCategoryName = "NBAEdges";
                     verteciesCategoryName = "NBAVertecies";
                     break;
-                case "GENERALKNOWLEDGE":
+                case "GENERAL KNOWLEDGE":
                     edgeCategoryName = "GeneralEdges";
                     verteciesCategoryName = "GeneralVertecies";
                     break;
-                case "MOVIES":
+                case "FILMS":
                     edgeCategoryName = "MoviesEdges";
                     verteciesCategoryName = "MoviesVertecies";
                     break;
@@ -324,17 +365,32 @@ namespace The_Mole_Backend.Models
                     edgeCategoryName = "MusicEdges";
                     verteciesCategoryName = "MusicVertecies";
                     break;
-                case "CELEB":
+                case "CELEBRITY":
                     edgeCategoryName = "CelebEdges";
                     verteciesCategoryName = "CelebVertecies";
                     break;
+                case "POLITICS":
+                    edgeCategoryName = "PoliticiansEdges";
+                    verteciesCategoryName = "PoliticiansVertecies";
+                    break;
+
                 default:
                     break;
             }
             DBservices db = new DBservices();
             //get edges and vertecies for the given category
-            List<string> vertecies = this.GetVerteciesForCategory("TheMoleConnection", verteciesCategoryName);
-            List<List<string>> edges = this.GetEdgesForCategory("TheMoleConnection", edgeCategoryName);
+            List<string> vertecies = new List<string>();
+            List<List<string>> edges = new List<List<string>>();
+            if (HttpContext.Current.Application[verteciesCategoryName] != null)
+            {
+                vertecies = HttpContext.Current.Application[verteciesCategoryName] as List<string>;
+            }
+            else vertecies = db.GetAllVertecies("TheMoleConnection", verteciesCategoryName);
+            if (HttpContext.Current.Application[edgeCategoryName] != null)
+            {
+                edges = HttpContext.Current.Application[edgeCategoryName] as List<List<string>>;
+            }
+            else edges = db.GetEdges("TheMoleConnection", edgeCategoryName);
             //create a graph 
             var graph = new WeightedDiGraph<string, int>();
             //insert vertecies to the graph
@@ -392,7 +448,12 @@ namespace The_Mole_Backend.Models
             return StartVerteciesAndPaths;
         }
 
-        //
+        /// <summary>
+        /// Get Two (+Source = Three) random vertecies to choose from in the game
+        /// </summary>
+        /// <param name="source"></param>
+        /// <param name="categoryName"></param>
+        /// <returns></returns>
         public List<string> getThreeMoreRandom(string source,string categoryName)
         {
             List<string> threeMoreRandom = new List<string>();
@@ -402,14 +463,8 @@ namespace The_Mole_Backend.Models
                 case "NBA":
                     edgeCategoryName = "NBAEdges";
                     break;
-                case "GENERALKNOWLEDGE":
-                    edgeCategoryName = "GeneralEdges";
-                    break;
                 case "GENERAL KNOWLEDGE":
                     edgeCategoryName = "GeneralEdges";
-                    break;
-                case "MOVIES":
-                    edgeCategoryName = "MoviesEdges";
                     break;
                 case "FILMS":
                     edgeCategoryName = "MoviesEdges";
@@ -417,34 +472,111 @@ namespace The_Mole_Backend.Models
                 case "MUSIC":
                     edgeCategoryName = "MusicEdges";
                     break;
-                case "CELEB":
+                case "CELEBRITY":
                     edgeCategoryName = "CelebEdges";
                     break;
+                case "POLITICS":
+                    edgeCategoryName = "PoliticiansEdges";
+                    break;
+
                 default:
                     break;
             }
             DBservices db = new DBservices();
             //get edges for the given category and source
+
             List<string> edges = db.GetEdgesForCategoryAndSource("TheMoleConnection", edgeCategoryName, source);
 
             bool isListReady = false;
             int counter = 0;
+            int index = 2;
             while (!isListReady)
             {
-                
+                if (edges.Count ==0)
+                {
+                    return threeMoreRandom;
+                }
+                if (edges.Count == 1)
+                {
+                    threeMoreRandom.Add(edges[0]);
+                    return threeMoreRandom;
+                }
+
                 int edgeIndex = random.Next(0, edges.Count);
-                if (!threeMoreRandom.Contains(edges[edgeIndex]))
+                
+                if (!threeMoreRandom.Contains(edges[edgeIndex]) && edges[edgeIndex] != source)
                 {
                     threeMoreRandom.Add(edges[edgeIndex]);
                     counter++;
                 }
-                if (counter == 2)
+                if (counter == index)
                 {
                     isListReady = true;
                 }
             }
             return threeMoreRandom;
         }
+
+        /// <summary>
+        /// Get Three (+Source = Four) random vertecies to choose from in the game
+        /// </summary>
+        /// <param name="source"></param>
+        /// <param name="categoryName"></param>
+        /// <returns></returns>
+        public List<string> getFourMoreRandom(string source, string categoryName)
+        {
+            List<string> threeMoreRandom = new List<string>();
+            string edgeCategoryName = "";
+            switch (categoryName.ToUpper())
+            {
+                case "NBA":
+                    edgeCategoryName = "NBAEdges";
+                    break;
+                case "GENERAL KNOWLEDGE":
+                    edgeCategoryName = "GeneralEdges";
+                    break;
+                case "FILMS":
+                    edgeCategoryName = "MoviesEdges";
+                    break;
+                case "MUSIC":
+                    edgeCategoryName = "MusicEdges";
+                    break;
+                case "CELEBRITY":
+                    edgeCategoryName = "CelebEdges";
+                    break;
+                case "POLITICS":
+                    edgeCategoryName = "PoliticiansEdges";
+                    break;
+
+                default:
+                    break;
+            }
+            DBservices db = new DBservices();
+            //get edges for the given category and source
+            List<string> edges = db.GetEdgesForCategoryAndSource("TheMoleConnection", edgeCategoryName, source);
+            if (edges.Count == 0 || edges.Count == 1 || edges.Count == 2)
+            {
+                return threeMoreRandom;
+            }
+            bool isListReady = false;
+            int counter = 0;
+            while (!isListReady)
+            {
+
+                int edgeIndex = random.Next(0, edges.Count);
+                if (!threeMoreRandom.Contains(edges[edgeIndex]) && edges[edgeIndex]!=source)
+                {
+                    threeMoreRandom.Add(edges[edgeIndex]);
+                    counter++;
+                }
+                if (counter == 3)
+                {
+                    isListReady = true;
+                }
+            }
+            return threeMoreRandom;
+        }
+
     }
 
     //helper for the algorithm

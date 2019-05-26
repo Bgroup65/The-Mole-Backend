@@ -1,11 +1,14 @@
 ﻿<!DOCTYPE html>
 <html>
 <head>
+    
     <meta charset="utf-8" />
     <title>Network testing</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="../Scripts/ajaxCalls.js"></script>
     <script>
+        //1. create a leader board screen and methods
+        //2. create a change avatar screen and methods 
         $(document).ready(function () {
             let today = new Date().toISOString();
             var p = {
@@ -13,30 +16,33 @@
                 NickName: "Trying to push",
                 Email: "trying to push email",
                 ProfilePic: "some picture",
-                Uid:"something else"
+                Uid: "something else"
             }
             var p1 = {
                 Token: "ne",
-                Uid:"sapir"
+                Uid: "sapir"
             }
-
+        //https://proj.ruppin.ac.il/bgroup65/prod/api/network/?source=Ion Iliescu&target=Jane Addams&categoryNAME=POLITICS
+            //ajaxCall('GET', "../api/network/?source=Ion Iliescu&target=Jane Addams&categoryNAME=POLITICS", "", success, error);
             //ajaxCall("POST", "../api/Player", JSON.stringify(p), success, error);
             //ajaxCall("POST", "../api/PlayerToken", JSON.stringify(p1), success, error);
-            //ajaxCall("POST", "../api/Player?avatarUrl=netta&uid=sapir", "", success, error);
+            //ajaxCall("POST", "../api/playerWinOrLose?win=1&cashMole=25&uid=0GMoIlsa3Sf75fYLEHxL4occobI2", "", success, error);
+            //ajaxCall("GET", "../api/playerGetPlayer?uid=0GMoIlsa3Sf75fYLEHxL4occobI2", "", success, error);
+            //ajaxCall("POST", "../api/PlayerAvatar?avatarUrl=http://proj.ruppin.ac.il/bgroup65/prod/img/1.png&uid=0GMoIlsa3Sf75fYLEHxL4occobI2", "", success, error);
             //ajaxCall("POST", "../api/Player?uid=sapir", "", success, error);
             //var uid = "something else";
             //ajaxCall("Get", "../api/Player/?uid=" + uid, "", success, error);
-            //ajaxCall("Get", "../api/networkStartAGame/?categoryName=NBA", "", success, error);
-            ajaxCall("Get", "../api/networkGetRandomVerteciesFromVertex/?source=Lebron James&categoryName=NBA", "", success, error);
+            //ajaxCall("Get", "../api/networkStartAGame/?categoryName=CELEBRITY", "", success, error);
+            //ajaxCall("Get", "../api/networkGetRandomVerteciesFromVertex/?source=Lebron James&categoryName=NBA", "", success, error);
             //randomVertecies();
-            //Path();
+          //  Path();
             //randomPaths();
-            //webScrape();
+            webScrape();
         });
         function Path() {
-            var source = "Curly Armstrong";
+            var source = "Curly Amstrong";
             var target = "Bob Hill";
-            ajaxCall("Get", "../api/network/?source="+source+"&target="+target+"&categoryName=NBA", "", success, error);
+            ajaxCall("Get", "../api/networkGetPath/?source="+source+"&target="+target+"&categoryName=NBA", "", success, error);
         }
         function randomVertecies() {
             ajaxCall("Get", "../api/network/?categoryname=nba", "", success, error);

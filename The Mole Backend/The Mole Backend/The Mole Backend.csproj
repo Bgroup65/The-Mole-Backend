@@ -242,8 +242,12 @@
     <Content Include="Global.asax" />
     <Content Include="HTML\dashboard.html" />
     <Content Include="HTML\forgot-password.html" />
-    <Content Include="HTML\templates\Games-Teble.html" />
+    <Content Include="HTML\Game Won-Teble.html" />
+    <Content Include="HTML\Games-Teble.html" />
     <Content Include="HTML\gulpfile.js" />
+    <Content Include="HTML\images\lior.gif" />
+    <Content Include="HTML\images\mor.gif" />
+    <Content Include="HTML\images\sapir.gif" />
     <Content Include="HTML\login.html" />
     <Content Include="HTML\templates\404.html" />
     <Content Include="HTML\templates\blank.html" />
@@ -256,7 +260,7 @@
     <Content Include="HTML\templates\utilities-color.html" />
     <Content Include="HTML\templates\utilities-other.html" />
     <Content Include="HTML\Users-Teble.html" />
-    <Content Include="HTML\Game Won-Teble.html" />
+    <Content Include="HTML\Vertecies in Games-Teble.html" />
     <Content Include="img\background img for login.png" />
     <Content Include="img\benny.gif" />
     <Content Include="img\celeb-02.png" />
@@ -303,6 +307,8 @@
     <Content Include="HTML\package-lock.json" />
     <Content Include="HTML\package.json" />
     <Content Include="HTML\README.md" />
+    <Content Include="HTML\images\Thumbs.db" />
+    <Content Include="img\Thumbs.db" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.3.1.js" />

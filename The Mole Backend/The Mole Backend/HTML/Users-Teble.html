@@ -48,12 +48,12 @@
                 $('#wait').hide();
                 $('#users').DataTable({
                     data: users,
-                    "order": [[4, "asc"]],
+                    "order": [[2, "desc"]],
                     columns: [
                         { data: "NickName" },
                         { data: "Email" },
-                        { data: "BirthDate" },
-                        { data: "Gender" },
+                        //{ data: "BirthDate" },
+                        //{ data: "Gender" },
                         { data: "NumOfWinnings" },
                     ],
                 });
@@ -119,8 +119,8 @@
                                     <tr>
                                         <th>NickName</th>
                                         <th>Email</th>
-                                        <th>BirthDay</th>
-                                        <th>Gender</th>
+                                        <!--<th>BirthDay</th>
+                                        <th>Gender</th>-->
                                         <th>Num of Wins</th>
                                     </tr>
                                 </thead>

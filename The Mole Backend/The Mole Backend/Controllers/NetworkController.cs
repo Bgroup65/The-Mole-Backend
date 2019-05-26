@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Web;
 using System.Web.Http;
 using The_Mole_Backend.Models;
 
@@ -16,6 +17,7 @@ namespace The_Mole_Backend.Controllers
         {
             try
             {
+
                 MainAlgorithm mainAlgorithm = new MainAlgorithm();
                 List<List<string>> literalPaths = new List<List<string>>();
                 List<int> pathsCount = new List<int>();
@@ -29,7 +31,8 @@ namespace The_Mole_Backend.Controllers
             }
             
         }
-
+        [HttpGet]
+        [Route("api/networkGetPath")]
         public IEnumerable<List<string>> GetPaths(string source,string target,string categoryName)
         {
             try
@@ -81,6 +84,25 @@ namespace The_Mole_Backend.Controllers
             {
 
                 throw new Exception("problem with GetRandomVerteciesFromVertex, the error: " + ex);
+            }
+        }
+
+        [HttpGet]
+        [Route("api/networkGetRandomVerteciesFromVertex3")]
+        public List<string> GetRandomVerteciesFromVertex3(string source, string categoryName)
+        {
+            try
+            {
+                MainAlgorithm mainAlgorithm = new MainAlgorithm();
+                List<string> moreVertecies = new List<string>();
+                moreVertecies = mainAlgorithm.getFourMoreRandom(source, categoryName);
+
+                return moreVertecies;
+            }
+            catch (Exception ex)
+            {
+
+                throw new Exception("problem with networkGetRandomVerteciesFromVertex3, the error: " + ex);
             }
         }
 

@@ -110,6 +110,19 @@ namespace AdminPage.Models
             string token = db.getToken(uid);
             return token;
         }
+        //set cash + winnings after a win or losing
+        public void SetCashAndWin(int win,int cashMole,string uid)
+        {
+            DBservices db = new DBservices();
+            db.insertWinOrLose(win, cashMole, uid);
+        }
+        public Player getPlayer(string uid)
+        {
+            DBservices db = new DBservices();
+
+            return db.GetPlayer(uid);
+        }
+
         public int InsertToken(string token,string uid)
         {
             DBservices db = new DBservices();
@@ -121,7 +134,7 @@ namespace AdminPage.Models
         {
             DBservices db = new DBservices();
 
-            int rowAffected = db.insertToken(token, uid);
+            int rowAffected = db.insertAvatar(avatarUrl, uid);
             return rowAffected;
         }
         //InsertLastLogin
@@ -157,11 +170,19 @@ namespace AdminPage.Models
             return numofPlayers;
         }
 
+        //read winners
+        public List<Player> ReadWinners()
+        {
+            DBservices dbs = new DBservices();
+            List<Player> lp = dbs.GetWinners("TheMoleConnection");
+            return lp;
+        }
+
         //Read Player og the game
         public Player PlayerOfTheGame()
         {
             DBservices dbs = new DBservices();
-            Player p = dbs.PlayerOfTheGame("TheMoleConnection", "Player");           
+            Player p = dbs.PlayerOfTheGame("TheMoleConnection", "Player");
             return p;
         }
     }
